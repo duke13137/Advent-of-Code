@@ -4,26 +4,20 @@
 
 (def input (->> (slurp (io/resource "aoc24/day01.txt"))
                 (str/split-lines)
-                (map parse-long)))
+                (map #(str/split % #"\s+"))
+                (apply map vector)
+                (map #(map parse-long %))))
 
 (defn part-1
   "Run with (n)bb -x aoc24.day01/part-1"
   [_]
   (->> input
-       (partition-by nil?)
-       (take-nth 2)
-       (map #(apply + %))
-       (apply max)
+       (map sort)
+       (apply map (fn [x y] (abs (- x y))))
+       (apply +)
        prn))
 
 (defn part-2
   "Run with (n)bb -x aoc24.day02/part-2"
   [_]
-  (->> input
-       (partition-by nil?)
-       (take-nth 2)
-       (map #(apply + %))
-       (sort-by -)
-       (take 3)
-       (apply +)
-       prn))
+  (prn "Not implemented yet!"))
