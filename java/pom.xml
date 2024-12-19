@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <groupId>github.com</groupId>
-    <artifactId>fonghou</artifactId>
+    <artifactId>AoC</artifactId>
     <version>0.1.0</version>
     <name>AoC</name>
     <dependencies>
@@ -12,8 +12,35 @@
             <artifactId>clojure</artifactId>
             <version>1.12.0</version>
         </dependency>
+        <dependency>
+            <groupId>dom-top</groupId>
+            <artifactId>dom-top</artifactId>
+            <version>1.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.11.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-console</artifactId>
+            <version>1.11.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.27.0</version>
+        </dependency>
     </dependencies>
     <build>
         <sourceDirectory>src</sourceDirectory>
+        <testSourceDirectory>test</testSourceDirectory>
     </build>
+    <repositories>
+        <repository>
+            <id>clojars</id>
+            <url>https://repo.clojars.org/</url>
+        </repository>
+    </repositories>
 </project>

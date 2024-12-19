@@ -3,41 +3,48 @@ package aoc24;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class Day01 {
 
     public static void main(String[] args) throws IOException {
-        Path inputPath = Path.of("resources", "aoc24", "day01.txt"); // More concise path creation
-        List<String> lines = Files.readAllLines(inputPath);
+        Path inputPath = Path.of("resources", "aoc24", "day01.txt");
+        try {
+            long totalDistance = calculateTotalDistance(inputPath);
+            System.out.println("Total distance: " + totalDistance);
+        } catch (InvalidInputFormatException e) {
+            System.err.println("Error processing input: " + e.getMessage());
+            System.exit(1);
+        }
+    }
 
-        List<Integer> leftList = new ArrayList<>();
-        List<Integer> rightList = new ArrayList<>();
+    public static long calculateTotalDistance(Path inputPath) throws IOException, InvalidInputFormatException {
+        int[][] pairs = Files.lines(inputPath)
+                .map(line -> line.split("\\s+"))
+                .map(parts -> new int[]{Integer.parseInt(parts[0]), Integer.parseInt(parts[1])})
+                .toArray(int[][]::new);
 
-        for (String line : lines) {
-            String[] parts = line.split("\\s+");
-            if (parts.length == 2) {
-                leftList.add(Integer.valueOf(parts[0]));
-                rightList.add(Integer.valueOf(parts[1]));
-            } else {
-                System.err.println("Skipping invalid line: " + line);
-            }
+        if (pairs.length == 0) {
+            throw new InvalidInputFormatException("Input file is empty or contains no valid lines.");
         }
 
-        Collections.sort(leftList);
-        Collections.sort(rightList);
+        int[] departures = Arrays.stream(pairs).mapToInt(p -> p[0]).sorted().toArray();
+        int[] arrivals = Arrays.stream(pairs).mapToInt(p -> p[1]).sorted().toArray();
 
-        long totalDistance = 0;
-        if (leftList.size() == rightList.size()) {
-            for (int i = 0; i < leftList.size(); i++) {
-                totalDistance += Math.abs(leftList.get(i) - rightList.get(i));
-            }
-        } else {
-            System.err.println("Lists have different sizes. Cannot calculate total distance.");
+        if (departures.length != arrivals.length) {
+            throw new InvalidInputFormatException("Unequal number of departure and arrival times.");
         }
 
-        System.out.println("Total distance: " + totalDistance);
+        return IntStream.range(0, departures.length)
+                .mapToLong(i -> Math.abs(departures[i] - arrivals[i]))
+                .sum();
+    }
+
+    static class InvalidInputFormatException extends Exception {
+
+        public InvalidInputFormatException(String message) {
+            super(message);
+        }
     }
 }

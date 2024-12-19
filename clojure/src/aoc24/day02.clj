@@ -15,9 +15,12 @@
          (every? #(<= 1 (Math/abs %) 3) diffs))))
 
 (defn part-1
-  "Run with (n)bb -x aoc24.day02/part-1"
   [_]
   (->> input
        (filter is-safe?)
        count
        prn))
+
+(defn part-2
+  [_]
+  (prn "Not implemented yet!"))

@@ -9,7 +9,6 @@
                 (map #(map parse-long %))))
 
 (defn part-1
-  "Run with (n)bb -x aoc24.day01/part-1"
   [_]
   (->> input
        (map sort)
@@ -18,6 +17,5 @@
        prn))
 
 (defn part-2
-  "Run with (n)bb -x aoc24.day02/part-2"
   [_]
   (prn "Not implemented yet!"))

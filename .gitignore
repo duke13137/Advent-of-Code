@@ -16,3 +16,4 @@ java/.project
 java/.settings
 java/target
 **/resources
+.calva

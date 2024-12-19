@@ -1,0 +1,8 @@
+
+{:paths ["src" "test" "dev"]
+ :deps {org.clojure/clojure                       {:mvn/version "RELEASE"}
+        dom-top/dom-top                           {:mvn/version "RELEASE"}
+
+        org.assertj/assertj-core                  {:mvn/version "RELEASE"}
+        org.junit.jupiter/junit-jupiter           {:mvn/version "RELEASE"}
+        org.junit.platform/junit-platform-console {:mvn/version "RELEASE"}}}
