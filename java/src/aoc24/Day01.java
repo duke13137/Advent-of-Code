@@ -19,8 +19,8 @@ public class Day01 {
         for (String line : lines) {
             String[] parts = line.split("\\s+");
             if (parts.length == 2) {
-                leftList.add(Integer.parseInt(parts[0]));
-                rightList.add(Integer.parseInt(parts[1]));
+                leftList.add(Integer.valueOf(parts[0]));
+                rightList.add(Integer.valueOf(parts[1]));
             } else {
                 System.err.println("Skipping invalid line: " + line);
             }
