@@ -11,3 +11,8 @@ node_modules
 .aider*
 .env
 input
+java/.classpath
+java/.project
+java/.settings
+java/target
+**/resources
