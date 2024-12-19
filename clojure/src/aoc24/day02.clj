@@ -4,26 +4,20 @@
 
 (def input (->> (slurp (io/resource "aoc24/day02.txt"))
                 (str/split-lines)
-                (map parse-long)))
+                (map #(str/split % #" "))
+                (map #(map parse-long %))))
+
+(defn is-safe?
+  [report]
+  (let [diffs (map - (rest report) report)]
+    (and (or (every? #(>= % 0) diffs)
+             (every? #(<= % 0) diffs))
+         (every? #(<= 1 (Math/abs %) 3) diffs))))
 
 (defn part-1
   "Run with (n)bb -x aoc24.day02/part-1"
   [_]
   (->> input
-       (partition-by nil?)
-       (take-nth 2)
-       (map #(apply + %))
-       (apply max)
-       prn))
-
-(defn part-2
-  "Run with (n)bb -x aoc24.day02/part-2"
-  [_]
-  (->> input
-       (partition-by nil?)
-       (take-nth 2)
-       (map #(apply + %))
-       (sort-by -)
-       (take 3)
-       (apply +)
+       (filter is-safe?)
+       count
        prn))

@@ -1,5 +1,5 @@
 ## You're <role>expert software developer</role>. 
-## Your task is to <purpose>write code to solve advent of code problem per instructions and user-input below.</purpose>
+## Your task is to <purpose>write code to solve advent of code problem per instructions and user-input below</purpose>.
 
 ```xml
 <instructions>
