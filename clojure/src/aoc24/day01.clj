@@ -16,7 +16,15 @@
        (apply +)
        prn))
 
-;; // read <part-2> in day01.md and implement part-2 AI!
 (defn part-2
   [_]
-  (prn "Not implemented yet!"))
+  (let [sorted-pairs (map sort input)
+        max-values (map last sorted-pairs)
+        min-values (map first sorted-pairs)]
+    (->> (map - max-values min-values)
+         (apply +)
+         prn)))
+
+(comment
+  (part-1 nil)
+  (part-2 nil))
