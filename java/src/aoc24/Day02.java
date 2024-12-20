@@ -18,6 +18,7 @@ public class Day02 {
     public static long countSafeReports(Path inputPath) throws IOException {
         long safeCount = 0;
         try (BufferedReader reader = Files.newBufferedReader(inputPath)) {
+            // refactor this to use exhanced for loop. AI!
             String line;
             while ((line = reader.readLine()) != null) {
                 List<Integer> report = parseReport(line);
@@ -33,7 +34,7 @@ public class Day02 {
         String[] parts = line.split("\\s+");
         List<Integer> report = new ArrayList<>();
         for (String part : parts) {
-            report.add(Integer.parseInt(part));
+            report.add(Integer.valueOf(part));
         }
         return report;
     }
