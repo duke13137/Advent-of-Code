@@ -16,6 +16,7 @@
        (apply +)
        prn))
 
+;; // read <part-2> in day01.md and implement part-2 AI!
 (defn part-2
   [_]
   (prn "Not implemented yet!"))
