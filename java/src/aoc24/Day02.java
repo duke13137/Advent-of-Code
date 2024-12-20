@@ -1,13 +1,11 @@
 package aoc24;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class Day02 {
 
@@ -18,17 +16,26 @@ public class Day02 {
     }
 
     public static long countSafeReports(Path inputPath) throws IOException {
-        try (Stream<String> lines = Files.lines(inputPath)) {
-            return lines.map(Day02::parseReport)
-                    .filter(Day02::isSafe)
-                    .count();
+        long safeCount = 0;
+        try (BufferedReader reader = Files.newBufferedReader(inputPath)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                List<Integer> report = parseReport(line);
+                if (isSafe(report)) {
+                    safeCount++;
+                }
+            }
         }
+        return safeCount;
     }
 
     private static List<Integer> parseReport(String line) {
-        return Arrays.stream(line.split("\\s+"))
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
+        String[] parts = line.split("\\s+");
+        List<Integer> report = new ArrayList<>();
+        for (String part : parts) {
+            report.add(Integer.parseInt(part));
+        }
+        return report;
     }
 
     private static boolean isSafe(List<Integer> report) {
@@ -36,14 +43,37 @@ public class Day02 {
             return true;
         }
 
-        List<Integer> diffs = IntStream.range(0, report.size() - 1)
-                .map(i -> report.get(i + 1) - report.get(i))
-                .boxed()
-                .collect(Collectors.toList());
+        List<Integer> diffs = new ArrayList<>();
+        for (int i = 0; i < report.size() - 1; i++) {
+            diffs.add(report.get(i + 1) - report.get(i));
+        }
 
-        boolean allIncreasing = diffs.stream().allMatch(diff -> diff >= 0);
-        boolean allDecreasing = diffs.stream().allMatch(diff -> diff <= 0);
+        boolean allIncreasing = true;
+        for (int diff : diffs) {
+            if (diff < 0) {
+                allIncreasing = false;
+                break;
+            }
+        }
 
-        return (allIncreasing || allDecreasing) && diffs.stream().allMatch(diff -> Math.abs(diff) >= 1 && Math.abs(diff) <= 3);
+        boolean allDecreasing = true;
+        for (int diff : diffs) {
+            if (diff > 0) {
+                allDecreasing = false;
+                break;
+            }
+        }
+
+        if (!allIncreasing && !allDecreasing) {
+            return false;
+        }
+
+        for (int diff : diffs) {
+            if (Math.abs(diff) < 1 || Math.abs(diff) > 3) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
