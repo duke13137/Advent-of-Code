@@ -11,17 +11,26 @@ public class Day02 {
 
     public static void main(String[] args) throws IOException {
         Path inputPath = Path.of("resources", "aoc24", "day02.txt");
-        long safeReports = countSafeReports(inputPath);
-        System.out.println("Number of safe reports: " + safeReports);
+        long safeReports = countSafeReports(inputPath, false);
+        System.out.println("Number of safe reports (Part 1): " + safeReports);
+
+        long safeReportsWithDampener = countSafeReports(inputPath, true);
+        System.out.println("Number of safe reports (Part 2): " + safeReportsWithDampener);
     }
 
-    public static long countSafeReports(Path inputPath) throws IOException {
+    public static long countSafeReports(Path inputPath, boolean withDampener) throws IOException {
         long safeCount = 0;
         try (BufferedReader reader = Files.newBufferedReader(inputPath)) {
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 List<Integer> report = parseReport(line);
-                if (isSafe(report)) {
-                    safeCount++;
+                if (withDampener) {
+                    if (isSafeWithDampener(report)) {
+                        safeCount++;
+                    }
+                } else {
+                    if (isSafe(report)) {
+                        safeCount++;
+                    }
                 }
             }
         }
@@ -74,5 +83,21 @@ public class Day02 {
         }
 
         return true;
+    }
+
+    private static boolean isSafeWithDampener(List<Integer> report) {
+        if (isSafe(report)) {
+            return true;
+        }
+
+        for (int i = 0; i < report.size(); i++) {
+            List<Integer> tempReport = new ArrayList<>(report);
+            tempReport.remove(i);
+            if (isSafe(tempReport)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
