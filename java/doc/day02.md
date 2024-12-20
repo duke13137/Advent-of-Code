@@ -5,8 +5,8 @@
 <instructions>
     <instruction>update code in the source file named Day##.java</instruction>
     <instruction>parse input in the txt file named day##.txt</instruction>
-    <instruction>verify code carefully using example input and output</instruction>
-    <instruction>you can use clojure version in day##.clj as pseudo code, but make sure code follows Java best practices and modern idioms (Java 21+) for clarity and efficiency</instruction>
+    <instruction>check logic carefully according to example input and output</instruction>
+    <instruction>you can use clojure code in day##.clj as pseudo code, but make sure Java code follows best practices and modern idioms (Java 21+) for clarity and efficiency</instruction>
 </instructions>
 
 <user-input>
@@ -42,10 +42,26 @@ In the example above, the reports can be found safe or unsafe by checking those 
 So, in this example, 2 reports are safe.
 
 Analyze the unusual data from the engineers. How many reports are safe?
-</user-input>
+--- Part Two ---
+The engineers are surprised by the low number of safe reports until they realize they forgot to tell you about the Problem Dampener.
 
-<exmaples>
-    <example>
+The Problem Dampener is a reactor-mounted module that lets the reactor safety systems tolerate a single bad level in what would otherwise be a safe report. It's like the bad level never happened!
+
+Now, the same rules apply as before, except if removing a single level from an unsafe report would make it safe, the report instead counts as safe.
+
+More of the above example's reports are now safe:
+
+7 6 4 2 1: Safe without removing any level.
+1 2 7 8 9: Unsafe regardless of which level is removed.
+9 7 6 2 1: Unsafe regardless of which level is removed.
+1 3 2 4 5: Safe by removing the second level, 3.
+8 6 4 4 1: Safe by removing the third level, 4.
+1 3 6 7 9: Safe without removing any level.
+Thanks to the Problem Dampener, 4 reports are actually safe!
+
+Update your analysis by handling situations where the Problem Dampener can remove a single level from unsafe reports. How many reports are now safe?
+
+<example>
 The unusual data (your puzzle input) consists of many reports, one report per line. Each report is a list of numbers called levels that are separated by spaces. For example:
 
 7 6 4 2 1
@@ -54,16 +70,17 @@ The unusual data (your puzzle input) consists of many reports, one report per li
 1 3 2 4 5
 8 6 4 4 1
 1 3 6 7 9
-This example data contains six reports each containing five levels.
-In the example above, the reports can be found safe or unsafe by checking those rules:
+--- Part Two ---
+More of the above example's reports are now safe:
 
-7 6 4 2 1: Safe because the levels are all decreasing by 1 or 2.
-1 2 7 8 9: Unsafe because 2 7 is an increase of 5.
-9 7 6 2 1: Unsafe because 6 2 is a decrease of 4.
-1 3 2 4 5: Unsafe because 1 3 is increasing but 3 2 is decreasing.
-8 6 4 4 1: Unsafe because 4 4 is neither an increase or a decrease.
-1 3 6 7 9: Safe because the levels are all increasing by 1, 2, or 3.
-So, in this example, 2 reports are safe.
-    </example>
-</exmaples>
+7 6 4 2 1: Safe without removing any level.
+1 2 7 8 9: Unsafe regardless of which level is removed.
+9 7 6 2 1: Unsafe regardless of which level is removed.
+1 3 2 4 5: Safe by removing the second level, 3.
+8 6 4 4 1: Safe by removing the third level, 4.
+1 3 6 7 9: Safe without removing any level.
+4 reports are actually safe!
+</example>
+</user-input>
+
 ```

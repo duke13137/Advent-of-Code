@@ -14,6 +14,14 @@
              (every? #(<= % 0) diffs))
          (every? #(<= 1 (Math/abs %) 3) diffs))))
 
+(defn is-safe-with-dampener?
+  [report]
+  (if (is-safe? report)
+    true
+    (some (fn [i]
+            (is-safe? (concat (take i report) (drop (inc i) report))))
+          (range (count report)))))
+
 (defn part-1
   [_]
   (->> input
@@ -23,4 +31,7 @@
 
 (defn part-2
   [_]
-  (prn "Not implemented yet!"))
+  (->> input
+       (filter is-safe-with-dampener?)
+       count
+       prn))
