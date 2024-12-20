@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Day01 {
@@ -36,9 +37,9 @@ public class Day01 {
             throw new InvalidInputFormatException("Unequal number of departure and arrival times.");
         }
 
-        return IntStream.range(0, departures.length)
-                .mapToLong(i -> Math.abs(departures[i] - arrivals[i]))
-                .sum();
+        return IntStream.range(0, departures.length).boxed()
+                .collect(Collectors.summingLong(i -> Math.abs(departures[i] - arrivals[i])));
+
     }
 
     static class InvalidInputFormatException extends Exception {
