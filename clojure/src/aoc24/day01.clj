@@ -18,10 +18,13 @@
 
 (defn part-2
   [_]
-  (->> input
-       (map sort)
-       (apply map (fn [x y] (abs (- x y))))
-       prn))
+  (let [[left right] input
+        freqs (frequencies right)]
+    (->> left
+         (map (fn [x]
+                (* x (get freqs x 0))))
+         (apply +)
+         prn)))
 
 (comment
   (part-1 nil)
