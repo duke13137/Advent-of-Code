@@ -18,12 +18,10 @@
 
 (defn part-2
   [_]
-  (let [sorted-pairs (map sort input)
-        max-values (map last sorted-pairs)
-        min-values (map first sorted-pairs)]
-    (->> (map - max-values min-values)
-         (apply +)
-         prn)))
+  (->> input
+       (map sort)
+       (apply map (fn [x y] (abs (- x y))))
+       prn))
 
 (comment
   (part-1 nil)
