@@ -32,7 +32,7 @@ public class Day02 {
         String[] parts = line.split("\\s+");
         List<Integer> report = new ArrayList<>();
         for (String part : parts) {
-            report.add(Integer.parseInt(part));
+            report.add(Integer.valueOf(part));
         }
         return report;
     }
