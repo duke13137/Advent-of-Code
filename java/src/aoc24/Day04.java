@@ -96,40 +96,19 @@ public class Day04 {
     String reversedWord = new StringBuilder(word).reverse().toString();
 
     // Check diagonal pairs
-    boolean topLeftBottomRight = false;
-    boolean topRightBottomLeft = false;
-    boolean bottomLeftTopRight = false;
-    boolean bottomRightTopLeft = false;
-
-    // Check top-left to bottom-right
-    String diag1 = extractString(grid, row - 1, col - 1, word.length(), -1, -1);
-    String diag2 = extractString(grid, row + 1, col + 1, word.length(), 1, 1);
-    if ((diag1.equals(word) || diag1.equals(reversedWord)) && (diag2.equals(word) || diag2.equals(reversedWord))) {
-      topLeftBottomRight = true;
-    }
-
-    // Check top-right to bottom-left
-    String diag3 = extractString(grid, row - 1, col + 1, word.length(), -1, 1);
-    String diag4 = extractString(grid, row + 1, col - 1, word.length(), 1, -1);
-    if ((diag3.equals(word) || diag3.equals(reversedWord)) && (diag4.equals(word) || diag4.equals(reversedWord))) {
-      topRightBottomLeft = true;
-    }
-
-    // Check bottom-left to top-right
-    String diag5 = extractString(grid, row + 1, col - 1, word.length(), 1, -1);
-    String diag6 = extractString(grid, row - 1, col + 1, word.length(), -1, 1);
-    if ((diag5.equals(word) || diag5.equals(reversedWord)) && (diag6.equals(word) || diag6.equals(reversedWord))) {
-      bottomLeftTopRight = true;
-    }
-
-    // Check bottom-right to top-left
-    String diag7 = extractString(grid, row + 1, col + 1, word.length(), 1, 1);
-    String diag8 = extractString(grid, row - 1, col - 1, word.length(), -1, -1);
-    if ((diag7.equals(word) || diag7.equals(reversedWord)) && (diag8.equals(word) || diag8.equals(reversedWord))) {
-      bottomRightTopLeft = true;
-    }
+    boolean topLeftBottomRight = checkDiagonalPair(grid, row, col, -1, -1, 1, 1, word, reversedWord);
+    boolean topRightBottomLeft = checkDiagonalPair(grid, row, col, -1, 1, 1, -1, word, reversedWord);
 
     // Check if either pair of diagonals forms an X-MAS shape
-    return (topLeftBottomRight && topRightBottomLeft) || (bottomLeftTopRight && bottomRightTopLeft);
+    return topLeftBottomRight && topRightBottomLeft;
+  }
+
+  private static boolean checkDiagonalPair(List<String> grid, int row, int col, int upDirRow, int upDirCol,
+      int downDirRow, int downDirCol, String word, String reversedWord) {
+    String upDiag = extractString(grid, row + upDirRow, col + upDirCol, word.length(), upDirRow, upDirCol);
+    String downDiag = extractString(grid, row + downDirRow, col + downDirCol, word.length(), downDirRow, downDirCol);
+
+    return (upDiag.equals(word) || upDiag.equals(reversedWord))
+        && (downDiag.equals(word) || downDiag.equals(reversedWord));
   }
 }
