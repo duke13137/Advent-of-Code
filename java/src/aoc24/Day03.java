@@ -37,29 +37,48 @@ public class Day03 {
         return executeMul(input, true);
     }
 
-    public static long part2(String input) {
-        long sum = 0;
-        boolean enabled = true;
+    private static int[] findNextInstruction(String input) {
         int doIndex = input.indexOf("do()");
         int dontIndex = input.indexOf("don't()");
 
-        while (doIndex != -1 || dontIndex != -1) {
-            int nextIndex = -1;
-            if (doIndex != -1 && (dontIndex == -1 || doIndex < dontIndex)) {
-                nextIndex = doIndex;
-            } else if (dontIndex != -1) {
-                nextIndex = dontIndex;
-            }
-
-            sum += executeMul(input.substring(0, nextIndex), enabled);
-            enabled = (nextIndex == doIndex);
-            input = input.substring(nextIndex + (nextIndex == doIndex ? 4 : 6));
-
-            doIndex = input.indexOf("do()");
-            dontIndex = input.indexOf("don't()");
+        if (doIndex == -1 && dontIndex == -1) {
+            return null;
+        } else if (doIndex == -1) {
+            return new int[]{1, dontIndex};
+        } else if (dontIndex == -1) {
+            return new int[]{0, doIndex};
+        } else if (doIndex < dontIndex) {
+            return new int[]{0, doIndex};
+        } else {
+            return new int[]{1, dontIndex};
         }
+    }
 
-        sum += executeMul(input, enabled);
+    private static long[] processChunk(String input, boolean enabled, long sum) {
+        int[] instruction = findNextInstruction(input);
+        if (instruction != null) {
+            int type = instruction[0];
+            int index = instruction[1];
+            String chunk = input.substring(0, index);
+            String remainingInput = input.substring(index + (type == 0 ? 4 : 6));
+            return new long[]{sum + executeMul(chunk, enabled), type == 0 ? 1 : 0, remainingInput.length()};
+        } else {
+            return new long[]{sum + executeMul(input, enabled), enabled ? 1 : 0, 0};
+        }
+    }
+
+    public static long part2(String input) {
+        long sum = 0;
+        boolean enabled = true;
+        while (input.length() > 0) {
+            long[] result = processChunk(input, enabled, sum);
+            sum = result[0];
+            enabled = result[1] == 1;
+            if (result[2] == 0) {
+                break;
+            }
+            input = input.substring((int) (input.length() - result[2]));
+        }
         return sum;
     }
 }
