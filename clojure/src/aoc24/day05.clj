@@ -50,8 +50,8 @@
             valid-placement? (fn [val idx]
                                (every?
                                 (fn [[x y]]
-                                  (if (and (= x val) (some #{y} remaining-update))
-                                    (> idx (.indexOf remaining-update y))
+                                  (if (and (= x val) (some #{y} (concat sorted-update remaining-update)))
+                                    (> idx (.indexOf (concat sorted-update remaining-update) y))
                                     true))
                                 (applicable-rules (concat sorted-update [val]) rules)))]
         (if (every? #(valid-placement? next-val %) (range (inc (count sorted-update))))
