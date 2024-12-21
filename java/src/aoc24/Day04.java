@@ -92,6 +92,7 @@ public class Day04 {
     }
 
     // Check for "MAS" in all four diagonal directions
+    // AI! refactor this to use a for loop
     return checkDiagonalForMAS(grid, row, col, -1, -1) &&
         checkDiagonalForMAS(grid, row, col, -1, 1) &&
         checkDiagonalForMAS(grid, row, col, 1, -1) &&
