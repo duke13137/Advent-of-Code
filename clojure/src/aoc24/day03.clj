@@ -21,21 +21,24 @@
   [_]
   (prn (execute-mul input true)))
 
-(defn- process-segment [input enabled? sum]
+(defn- find-next-instruction [input]
   (let [do-index (str/index-of input "do()")
-        dont-index (str/index-of input "don't()")
-        [next-index new-enabled?] (condp = [do-index dont-index]
-                                    [nil nil] [nil enabled?]
-                                    [nil 0] [dont-index false]
-                                    [0 nil] [do-index true]
-                                    (if (< do-index dont-index)
-                                      [do-index true]
-                                      [dont-index false]))]
-    (if (nil? next-index)
-      [(+ sum (execute-mul input enabled?)) enabled?]
-      [(+ sum (execute-mul (subs input 0 next-index) enabled?))
-       new-enabled?
-       (subs input (+ next-index (if new-enabled? 4 6)))])))
+        dont-index (str/index-of input "don't()")]
+    (cond
+      (and (nil? do-index) (nil? dont-index)) nil
+      (nil? do-index) [:dont dont-index]
+      (nil? dont-index) [:do do-index]
+      (< do-index dont-index) [:do do-index]
+      :else [:dont dont-index])))
+
+(defn- process-chunk [input enabled? sum]
+  (if-let [[instruction-type index] (find-next-instruction input)]
+    (let [chunk (subs input 0 index)
+          remaining-input (subs input (+ index (if (= instruction-type :do) 4 6)))]
+      [(+ sum (execute-mul chunk enabled?))
+       (= instruction-type :do)
+       remaining-input])
+    [(+ sum (execute-mul input enabled?)) enabled? nil]))
 
 (defn part-2
   "Run with bb -x aoc24.day03/part-2"
@@ -43,7 +46,7 @@
   (loop [input input
          sum 0
          enabled? true]
-    (let [[new-sum new-enabled? remaining-input] (process-segment input enabled? sum)]
+    (let [[new-sum new-enabled? remaining-input] (process-chunk input enabled? sum)]
       (if (nil? remaining-input)
         (prn new-sum)
         (recur remaining-input new-sum new-enabled?)))))
