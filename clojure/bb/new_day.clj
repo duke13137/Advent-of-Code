@@ -21,7 +21,7 @@
         day-number day
         new-day (str "day"
                      (ensure-leading-zero day-number))
-        day01 (slurp (fs/file "src" "aoc22" "day01.cljc"))
+        day01 (slurp (fs/file "src" "aoc22" "day01.clj"))
         replaced (str/replace day01 "aoc22" new-year)
         replaced (str/replace replaced "day01" new-day)]
     (fs/create-dirs (fs/path "src" new-year))
@@ -39,7 +39,7 @@
               (fs/copy (fs/file "resources" "aoc22" "day01.txt")
                        new-day-resource)))
         (println (format "File %s already exists." (str new-day-resource)))))
-    (let [new-day (fs/file "src" new-year (str new-day ".cljc"))]
+    (let [new-day (fs/file "src" new-year (str new-day ".clj"))]
       (if-not (fs/exists? new-day)
         (spit new-day replaced)
         (println (format "File %s/%s already exists." new-year new-day))))))

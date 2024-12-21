@@ -1,13 +1,17 @@
-## You're <role>expert software developer</role>. 
-## Your task is to <purpose>write code to solve advent of code problem per instructions and user-input below</purpose>.
+## You're <role>expert software developer</role>
+
+## Your task is to <purpose>write code to solve advent of code problem per instructions and user-input below</purpose>
 
 ```xml
+```
+
 <instructions>
-    <instruction>update code in the source file named day##.clj</instruction>
-    <instruction>parse input in the txt file named day##.txt</instruction>
-    <instruction>code should be merged into input, part-1, part-2 accordingly</instruction>
-    <instruction>check logic carefully according to example input and output</instruction>
-    <instruction>make sure code follows best practices and idioms for clarity and efficiency</instruction>
+    <instruction>each day's problem has two parts. write reusable methods that has informative names.</instruction>
+    <instruction>each part has an input file named as day##.txt, write *one* method to read and parse input</instruction>
+    <instruction>think step by step the algorithm how example input can be transformed to output answer</instruction>
+    <instruction>write java junit tests for each exmaples</instruction>
+    <instruction>make it work then make it fast and keep it simple.</instruction>
+    <instruction>code should follows best practices and idioms of implementation language (e.g. java 21+, clojure 1.2)</instruction>
 </instructions>
 
 <user-input>
@@ -63,26 +67,6 @@ Thanks to the Problem Dampener, 4 reports are actually safe!
 Update your analysis by handling situations where the Problem Dampener can remove a single level from unsafe reports. How many reports are now safe?
 </user-input>
 
-<exmaples>
-    <example>
-The unusual data (your puzzle input) consists of many reports, one report per line. Each report is a list of numbers called levels that are separated by spaces. For example:
-
-7 6 4 2 1
-1 2 7 8 9
-9 7 6 2 1
-1 3 2 4 5
-8 6 4 4 1
-1 3 6 7 9
---- Part Two ---
-More of the above example's reports are now safe:
-
-7 6 4 2 1: Safe without removing any level.
-1 2 7 8 9: Unsafe regardless of which level is removed.
-9 7 6 2 1: Unsafe regardless of which level is removed.
-1 3 2 4 5: Safe by removing the second level, 3.
-8 6 4 4 1: Safe by removing the third level, 4.
-1 3 6 7 9: Safe without removing any level.
-4 reports are actually safe!
-    </example>
-</exmaples>
 ```
+```
+

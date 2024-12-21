@@ -14,6 +14,8 @@
             0
             matches)))
 
+(def input (parse-input "aoc24/day03.txt"))
+
 (defn part-1
   "Run with bb -x aoc24.day03/part-1"
   [_]
@@ -21,26 +23,25 @@
 
 (defn part-2
   "Run with bb -x aoc24.day03/part-2"
-  [input]
-  (loop [input input
-         sum 0
-         enabled? true]
-    (let [do-index (str/index-of input "do()")
-          dont-index (str/index-of input "don't()")
-          next-index (cond
-                       (and do-index (or (nil? dont-index) (< do-index dont-index)))
-                       do-index
+  [_]
+  (prn (loop [input input
+              sum 0
+              enabled? true]
+        (let [do-index (str/index-of input "do()")
+              dont-index (str/index-of input "don't()")
+              next-index (cond
+                           (and do-index (or (nil? dont-index) (< do-index dont-index)))
+                           do-index
 
-                       (and dont-index (or (nil? do-index) (< dont-index do-index)))
-                       dont-index
+                           (and dont-index (or (nil? do-index) (< dont-index do-index)))
+                           dont-index
 
-                       :else
-                       nil)]
-      (if (nil? next-index)
-        (+ sum (execute-mul input enabled?))
-        (let [mul-result (execute-mul (subs input 0 next-index) enabled?)
-              new-enabled? (if (= next-index do-index) true false)
-              remaining-input (subs input (+ next-index (if (= next-index do-index) 4 6)))]
-          (recur remaining-input (+ sum mul-result) new-enabled?))))))
+                           :else
+                           nil)]
+          (if (nil? next-index)
+            (+ sum (execute-mul input enabled?))
+            (let [mul-result (execute-mul (subs input 0 next-index) enabled?)
+                  new-enabled? (if (= next-index do-index) true false)
+                  remaining-input (subs input (+ next-index (if (= next-index do-index) 4 6)))]
+              (recur remaining-input (+ sum mul-result) new-enabled?)))))))
 
-(def input (parse-input "aoc24/day03.txt"))
