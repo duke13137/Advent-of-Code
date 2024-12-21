@@ -50,11 +50,11 @@
             valid-placement? (fn [val idx]
                                (every?
                                 (fn [[x y]]
-                                  (if (and (= x val) (some #{y} (concat (subvec sorted-update 0 idx) remaining-update)))
-                                    (> (.indexOf (concat (subvec sorted-update 0 idx) [val] ) x)
-                                       (.indexOf (concat (subvec sorted-update 0 idx) [val] ) y))
+                                  (if (and (= x val) (some #{y} (concat sorted-update remaining-update)))
+                                    (> (.indexOf (concat sorted-update [val]) x)
+                                       (.indexOf (concat sorted-update [val]) y))
                                     true))
-                                (applicable-rules (concat (subvec sorted-update 0 idx) [val] ) rules)))]
+                                (applicable-rules (concat sorted-update [val]) rules)))]
         (if (every? #(valid-placement? next-val %) (range (inc (count sorted-update))))
           (recur (conj sorted-update next-val) (rest remaining-update))
           (let [correct-index (first (filter #(valid-placement? next-val %) (range (inc (count sorted-update)))))]
