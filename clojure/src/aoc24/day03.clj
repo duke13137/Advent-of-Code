@@ -5,29 +5,34 @@
 (defn parse-input [file]
   (str/trim (slurp (io/resource file))))
 
-
-(defn execute-mul [line]
+(defn execute-mul [line enabled?]
   (let [matches (re-seq #"mul\((\d+),(\d+)\)" line)]
     (reduce (fn [sum [_ a b]]
-              (+ sum (* (parse-long a) (parse-long b))))
+              (if enabled?
+                (+ sum (* (parse-long a) (parse-long b)))
+                sum))
             0
             matches)))
 
-(def input (parse-input "aoc24/day03.txt"))
 (defn part-1
   "Run with bb -x aoc24.day03/part-1"
-  [_]
-  (prn (execute-mul input)))
+  [input]
+  (execute-mul input true))
 
 (defn part-2
-  "Run with bb -x aoc24.day02/part-2"
-  [_]
-  (->> input
-       (partition-by nil?)
-       (take-nth 2)
-       (map #(apply + %))
-       (sort-by -)
-       (take 3)
-       (apply +)
-       prn))
+  "Run with bb -x aoc24.day03/part-2"
+  [input]
+  (loop [lines (str/split-lines input)
+         sum 0
+         enabled? true]
+    (if (empty? lines)
+      sum
+      (let [line (first lines)
+            new-enabled? (cond
+                           (str/includes? line "do()") true
+                           (str/includes? line "don't()") false
+                           :else enabled?)
+            mul-result (execute-mul line new-enabled?)]
+        (recur (rest lines) (+ sum mul-result) new-enabled?)))))
 
+(def input (parse-input "aoc24/day03.txt"))
