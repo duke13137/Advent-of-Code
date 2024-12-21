@@ -86,9 +86,16 @@ public class Day04 {
   }
 
   private static boolean isXMASShape(List<String> grid, int row, int col) {
-    return (checkDiagonalForMAS(grid, row, col, 1, 1) || checkDiagonalForMAS(grid, row, col, -1, -1))
-        && (checkOppositeDiagonalForMAS(grid, row, col, -1, 1)
-            || checkOppositeDiagonalForMAS(grid, row, col, 1, -1));
+    // Check for 'A' at the center
+    if (grid.get(row).charAt(col) != 'A') {
+      return false;
+    }
+
+    // Check for "MAS" in all four diagonal directions
+    return checkDiagonalForMAS(grid, row, col, -1, -1) &&
+           checkDiagonalForMAS(grid, row, col, -1, 1) &&
+           checkDiagonalForMAS(grid, row, col, 1, -1) &&
+           checkDiagonalForMAS(grid, row, col, 1, 1);
   }
 
   private static boolean checkDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
@@ -97,27 +104,19 @@ public class Day04 {
     int rows = grid.size();
     int cols = grid.get(0).length();
 
-    // Start checking one position away from the center
+    // Calculate start position for diagonal check
     int startRow = row - dirRow;
     int startCol = col - dirCol;
 
-    for (int i = 0; i < wordLen; i++) {
-      int newRow = startRow + i * dirRow;
-      int newCol = startCol + i * dirCol;
-
-      if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
-        String forward = extractString(grid, newRow, newCol, wordLen, dirRow, dirCol);
-        String backward = new StringBuilder(forward).reverse().toString();
-        if (forward.equals(word) || backward.equals(word)) {
-          return true;
-        }
-      }
+    // Check if start position is within grid
+    if (startRow < 0 || startRow >= rows || startCol < 0 || startCol >= cols) {
+      return false;
     }
 
-    return false;
-  }
+    // Extract string in the diagonal direction
+    String diagonalStr = extractString(grid, startRow, startCol, wordLen, dirRow, dirCol);
 
-  private static boolean checkOppositeDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
-    return checkDiagonalForMAS(grid, row, col, dirRow, dirCol);
+    // Check for "MAS" or "SAM" in the extracted string
+    return diagonalStr.equals(word) || diagonalStr.equals(new StringBuilder(word).reverse().toString());
   }
 }
