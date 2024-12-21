@@ -53,7 +53,7 @@
                                   (if (and (= x val) (some #{y} (concat sorted-update remaining-update)))
                                     (> idx (.indexOf (concat sorted-update remaining-update) y))
                                     true))
-                                (applicable-rules (concat sorted-update [val]) rules)))]
+                                (applicable-rules (concat (subvec sorted-update 0 idx) [val] (subvec sorted-update idx)) rules)))]
         (if (every? #(valid-placement? next-val %) (range (inc (count sorted-update))))
           (recur (conj sorted-update next-val) (rest remaining-update))
           (let [correct-index (first (filter #(valid-placement? next-val %) (range (inc (count sorted-update)))))]
