@@ -2,6 +2,8 @@
   (:require [clojure.java.io :as io]
             [clojure.string :as str]))
 
+(def input (parse-input "aoc24/day03.txt"))
+
 (defn parse-input [file]
   (str/trim (slurp (io/resource file))))
 
