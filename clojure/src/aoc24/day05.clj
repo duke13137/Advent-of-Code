@@ -47,7 +47,7 @@
     (if (empty? remaining-update)
       sorted-update
       (let [next-val (first remaining-update)
-            valid-placement? (fn [val idx]
+            valid-placement? (fn [val]
                                (every?
                                 (fn [[x y]]
                                   (if (and (= x val) (some #{y} (concat sorted-update remaining-update)))
@@ -55,9 +55,9 @@
                                        (.indexOf (concat sorted-update [val]) y))
                                     true))
                                 (applicable-rules (concat sorted-update [val]) rules)))]
-        (if (every? #(valid-placement? next-val %) (range (inc (count sorted-update))))
+        (if (every? #(valid-placement? next-val) (range (inc (count sorted-update))))
           (recur (conj sorted-update next-val) (rest remaining-update))
-          (let [correct-index (first (filter #(valid-placement? next-val %) (range (inc (count sorted-update)))))]
+          (let [correct-index (first (filter #(valid-placement? next-val) (range (inc (count sorted-update)))))]
             (recur (-> (subvec sorted-update 0 correct-index)
                        (conj next-val)
                        (into (subvec sorted-update correct-index)))
