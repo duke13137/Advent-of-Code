@@ -74,8 +74,8 @@ public class Day04 {
     int cols = grid.get(0).length();
     long count = 0;
 
-    for (int row = 1; row < rows - 1; row++) {
-      for (int col = 1; col < cols - 1; col++) {
+    for (int row = 0; row < rows - 2; row++) {
+      for (int col = 0; col < cols - 2; col++) {
         if (isXMASShape(grid, row, col)) {
           count++;
         }
@@ -90,17 +90,15 @@ public class Day04 {
     String word = "MAS";
     String reversedWord = new StringBuilder(word).reverse().toString();
 
-    // Check diagonal pairs
-    boolean topLeftBottomRight = checkDiagonalPair(grid, row, col, -1, -1, 1, 1, word, reversedWord);
-    boolean topRightBottomLeft = checkDiagonalPair(grid, row, col, -1, 1, 1, -1, word, reversedWord);
-
-    return topLeftBottomRight || topRightBottomLeft;
+    // Check if the current position can be the top-left of an X-MAS shape
+    return checkDiagonalPair(grid, row, col, 0, 0, 2, 2, word, reversedWord) ||
+           checkDiagonalPair(grid, row, col, 0, 2, 2, 0, word, reversedWord);
   }
 
   private static boolean checkDiagonalPair(List<String> grid, int row, int col, int upDirRow, int upDirCol,
       int downDirRow, int downDirCol, String word, String reversedWord) {
-    String upDiag = extractString(grid, row + upDirRow, col + upDirCol, word.length(), upDirRow, upDirCol);
-    String downDiag = extractString(grid, row + downDirRow, col + downDirCol, word.length(), downDirRow, downDirCol);
+    String upDiag = extractString(grid, row, col, word.length(), upDirRow, upDirCol);
+    String downDiag = extractString(grid, row + downDirRow - upDirRow, col + downDirCol - upDirCol, word.length(), downDirRow - upDirRow, downDirCol - upDirCol);
 
     return (upDiag.equals(word) || upDiag.equals(reversedWord))
         && (downDiag.equals(word) || downDiag.equals(reversedWord));
