@@ -86,28 +86,31 @@ public class Day04 {
   }
 
   private static boolean isXMASShape(List<String> grid, int row, int col) {
-    // Check for "MAS" in both diagonal directions, allowing for overlap and variable starting positions
-    return checkDiagonalForMAS(grid, row, col, 1, 1) && checkDiagonalForMAS(grid, row, col, -1, 1);
+    // Check for "MAS" in both diagonal directions, allowing for overlap
+    return checkDiagonalForMAS(grid, row, col, 1, 1) && checkOppositeDiagonalForMAS(grid, row, col, -1, 1);
   }
 
   private static boolean checkDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
-    // Check for "MAS" in one diagonal direction with flexible starting positions
+    // Check for "MAS" in one diagonal direction
     String word = "MAS";
     int wordLen = word.length();
     int rows = grid.size();
     int cols = grid.get(0).length();
 
-    for (int startRow = row - 2; startRow <= row + 2; startRow++) {
-      for (int startCol = col - 2; startCol <= col + 2; startCol++) {
-        if (startRow >= 0 && startRow < rows && startCol >= 0 && startCol < cols) {
-          String forward = extractString(grid, startRow, startCol, wordLen, dirRow, dirCol);
-          if (forward.equals(word) || new StringBuilder(forward).reverse().toString().equals(word)) {
-            return true;
-          }
-        }
-      }
+    // Start checking one position away from the center
+    int startRow = row + dirRow;
+    int startCol = col + dirCol;
+
+    if (startRow >= 0 && startRow < rows && startCol >= 0 && startCol < cols) {
+      String forward = extractString(grid, startRow, startCol, wordLen, dirRow, dirCol);
+      return forward.equals(word) || new StringBuilder(forward).reverse().toString().equals(word);
     }
 
     return false;
+  }
+
+  private static boolean checkOppositeDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
+    // Check for "MAS" in the opposite diagonal direction
+    return checkDiagonalForMAS(grid, row, col, dirRow, dirCol);
   }
 }
