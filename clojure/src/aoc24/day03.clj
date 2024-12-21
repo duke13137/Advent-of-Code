@@ -5,6 +5,7 @@
 (defn parse-input [file]
   (str/trim (slurp (io/resource file))))
 
+
 (defn execute-mul [line]
   (let [matches (re-seq #"mul\((\d+),(\d+)\)" line)]
     (reduce (fn [sum [_ a b]]
@@ -12,10 +13,11 @@
             0
             matches)))
 
+(def input (parse-input "aoc24/day03.txt"))
 (defn part-1
   "Run with bb -x aoc24.day03/part-1"
-  [input]
-  (execute-mul input))
+  [_]
+  (prn (execute-mul input)))
 
 (defn part-2
   "Run with bb -x aoc24.day02/part-2"
@@ -29,4 +31,3 @@
        (apply +)
        prn))
 
-(def input (parse-input "aoc24/day03.txt"))
