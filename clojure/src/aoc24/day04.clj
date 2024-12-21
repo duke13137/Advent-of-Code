@@ -48,9 +48,8 @@
 (defn- is-xmas-shape [grid row col]
   (let [word "MAS"
         reversed-word (str/reverse word)]
-    (and (= \A (get-in grid [row col]))
-         (check-diagonal-pair grid row col -1 -1 1 1 word reversed-word)
-         (check-diagonal-pair grid row col -1 1 1 -1 word reversed-word))))
+    (or (check-diagonal-pair grid row col -1 -1 1 1 word reversed-word)
+        (check-diagonal-pair grid row col -1 1 1 -1 word reversed-word))))
 
 (defn count-xmas-shapes [grid]
   (let [rows (count grid)

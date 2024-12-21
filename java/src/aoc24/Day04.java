@@ -86,11 +86,6 @@ public class Day04 {
   }
 
   private static boolean isXMASShape(List<String> grid, int row, int col) {
-    // Check for 'A' in the center
-    if (grid.get(row).charAt(col) != 'A') {
-      return false;
-    }
-
     // Define the word and its reverse
     String word = "MAS";
     String reversedWord = new StringBuilder(word).reverse().toString();
@@ -99,8 +94,7 @@ public class Day04 {
     boolean topLeftBottomRight = checkDiagonalPair(grid, row, col, -1, -1, 1, 1, word, reversedWord);
     boolean topRightBottomLeft = checkDiagonalPair(grid, row, col, -1, 1, 1, -1, word, reversedWord);
 
-    // Check if either pair of diagonals forms an X-MAS shape
-    return topLeftBottomRight && topRightBottomLeft;
+    return topLeftBottomRight || topRightBottomLeft;
   }
 
   private static boolean checkDiagonalPair(List<String> grid, int row, int col, int upDirRow, int upDirCol,
