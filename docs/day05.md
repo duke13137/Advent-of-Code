@@ -66,3 +66,59 @@ The middle page numbers of valid updates are: 61, 53, and 29. The sum is 143.
 
 The task involves verifying update orders against given rules and summing the middle page numbers of only the valid updates.
 
+Okay, here's a concise summary of the problem, keeping the example data:
+
+**Problem:**
+
+You're given page ordering rules (e.g., `47|53` means page 47 must come before 53) and a list of updates (sequences of page numbers).
+
+**Part 1:**
+
+1.  **Validate:** Determine which updates are in the correct order according to the rules.
+2.  **Calculate:**  Find the middle page number of each correctly-ordered update. Sum these middle numbers.
+
+**Part 2:**
+
+1.  **Correct:** For the *incorrectly*-ordered updates, reorder the pages to comply with the rules.
+2.  **Calculate:** Find the middle page number of each *corrected* update. Sum these middle numbers.
+
+**Example Data:**
+
+**Rules:**
+```
+47|53
+97|13
+97|61
+97|47
+75|29
+61|13
+75|53
+29|13
+97|29
+53|29
+61|53
+97|53
+61|29
+47|13
+75|47
+97|75
+47|61
+75|61
+47|29
+75|13
+53|13
+```
+
+**Updates:**
+```
+75,47,61,53,29
+97,61,53,29,13
+75,29,13
+75,97,47,61,53
+61,13,29
+97,13,75,29,47
+```
+**Part 1 Result:** Correctly ordered updates are `75,47,61,53,29`, `97,61,53,29,13`, and `75,29,13` with middle numbers `61`, `53`, and `29` which sums to `143`
+
+**Part 2 Result:** Incorrectly ordered updates are corrected to `97,75,47,61,53`, `61,29,13`, and `97,75,47,29,13`, with middle numbers `47`, `29`, and `47` which sums to `123`
+

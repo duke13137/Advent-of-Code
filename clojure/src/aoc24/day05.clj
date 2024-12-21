@@ -47,14 +47,17 @@
     (if (empty? remaining-update)
       sorted-update
       (let [next-val (first remaining-update)
-            valid-placement? (fn [val]
+            relevant-rules (filter (fn [[x y]] (or (= x next-val) (= y next-val))) rules)
+            valid-placement? (fn [idx]
                                (every?
                                 (fn [[x y]]
-                                  (if (and (= x val) (some #{y} (concat sorted-update remaining-update)))
-                                    (> (.indexOf (concat sorted-update [val]) x)
-                                       (.indexOf (concat sorted-update [val]) y))
-                                    true))
-                                (applicable-rules (concat sorted-update [val]) rules)))]
+                                  (let [test-update (-> (subvec sorted-update 0 idx)
+                                                        (conj next-val)
+                                                        (into (subvec sorted-update idx)))]
+                                    (if (and (some #{x} test-update) (some #{y} test-update))
+                                      (< (.indexOf test-update x) (.indexOf test-update y))
+                                      true)))
+                                relevant-rules))]
         (if (every? valid-placement? (range (inc (count sorted-update))))
           (recur (conj sorted-update next-val) (rest remaining-update))
           (let [correct-index (first (filter valid-placement? (range (inc (count sorted-update)))))]
