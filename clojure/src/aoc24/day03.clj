@@ -8,13 +8,13 @@
   (* (Integer/parseInt x) (Integer/parseInt y)))
 
 (defn part-1
-  []
+  [_]
   (let [mul-regex #"mul\((\d{1,3}),(\d{1,3})\)"
         matches (re-seq mul-regex input)]
     (reduce + (map calculate-product matches))))
 
 (defn part-2
-  []
+  [_]
   (let [mul-regex #"mul\((\d{1,3}),(\d{1,3})\)"
         do-regex #"do\(\)"
         dont-regex #"don't\(\)"
@@ -33,7 +33,7 @@
                                        (reset! enabled? false)
                                        (recur (subs s (count (re-find dont-regex s)))))
         :else (recur (subs s 1))))
-    @sum)))
+    @sum))
 
 (defn -main []
   (println "Part 1:" (part-1))
