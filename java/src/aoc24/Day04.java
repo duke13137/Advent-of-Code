@@ -86,12 +86,20 @@ public class Day04 {
   }
 
   private static boolean isXMASShape(List<String> grid, int row, int col) {
-    // Check for "MAS" in both diagonal directions, allowing for overlap and variable starting positions
-    return checkDiagonalForMAS(grid, row, col, 1, 1) && checkDiagonalForMAS(grid, row, col, -1, 1);
+    // Check for "MAS" in both diagonal directions and ensure they intersect at a common point
+    int[] mas1 = checkDiagonalForMAS(grid, row, col, 1, 1);
+    int[] mas2 = checkDiagonalForMAS(grid, row, col, -1, 1);
+
+    if (mas1 != null && mas2 != null) {
+      // Check if the two "MAS" sequences intersect at a common point
+      return mas1[0] + mas1[2] == mas2[0] && mas1[1] - mas1[2] == mas2[1];
+    }
+
+    return false;
   }
 
-  private static boolean checkDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
-    // Check for "MAS" in one diagonal direction, with flexible starting positions
+  private static int[] checkDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
+    // Check for "MAS" in one diagonal direction and return the coordinates of the found sequence
     String word = "MAS";
     int wordLen = word.length();
     int rows = grid.size();
@@ -102,18 +110,16 @@ public class Day04 {
         if (startRow >= 0 && startRow < rows && startCol >= 0 && startCol < cols) {
           String forward = extractString(grid, startRow, startCol, wordLen, dirRow, dirCol);
           if (forward.equals(word) || new StringBuilder(forward).reverse().toString().equals(word)) {
-            // Check the opposite direction from the found "MAS"
-            int oppositeRow = startRow + (wordLen - 1) * dirRow;
-            int oppositeCol = startCol + (wordLen - 1) * dirCol;
-            if (checkOppositeDiagonalForMAS(grid, oppositeRow, oppositeCol, dirRow, dirCol, word)) {
-              return true;
-            }
+            // Calculate the end position of "MAS"
+            int endRow = startRow + (wordLen - 1) * dirRow;
+            int endCol = startCol + (wordLen - 1) * dirCol;
+            return new int[] { endRow, endCol, wordLen - 1 };
           }
         }
       }
     }
 
-    return false;
+    return null;
   }
 
   private static boolean checkOppositeDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol, String word) {
