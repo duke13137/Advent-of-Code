@@ -74,8 +74,8 @@ public class Day04 {
     int cols = grid.get(0).length();
     long count = 0;
 
-    for (int row = 1; row < rows - 1; row++) {
-      for (int col = 1; col < cols - 1; col++) {
+    for (int row = 0; row < rows; row++) {
+      for (int col = 0; col < cols; col++) {
         if (isXMASShape(grid, row, col)) {
           count++;
         }
@@ -86,45 +86,53 @@ public class Day04 {
   }
 
   private static boolean isXMASShape(List<String> grid, int row, int col) {
-    // Check for "MAS" in both diagonal directions, allowing for overlap and non-straight paths
-    return checkDiagonalForMAS(grid, row, col, 1, 1) && checkDiagonalForMAS(grid, row, col, 1, -1);
+    // Check for "MAS" in both diagonal directions, allowing for overlap and variable starting positions
+    return checkDiagonalForMAS(grid, row, col, 1, 1) && checkDiagonalForMAS(grid, row, col, -1, 1);
   }
 
   private static boolean checkDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
-    // Check for "MAS" in one diagonal direction, starting one position away from the center
+    // Check for "MAS" in one diagonal direction, with flexible starting positions
     String word = "MAS";
     int wordLen = word.length();
     int rows = grid.size();
     int cols = grid.get(0).length();
 
-    // Check forward direction
-    boolean foundForward = false;
-    for (int start = 1; start <= 2; start++) {
-      int newRow = row - start * dirRow;
-      int newCol = col - start * dirCol;
-      if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
-        String forward = extractString(grid, newRow, newCol, wordLen, dirRow, dirCol);
-        if (forward.equals(word) || new StringBuilder(forward).reverse().toString().equals(word)) {
-          foundForward = true;
-          break;
+    for (int startRow = row - 2; startRow <= row + 2; startRow++) {
+      for (int startCol = col - 2; startCol <= col + 2; startCol++) {
+        if (startRow >= 0 && startRow < rows && startCol >= 0 && startCol < cols) {
+          String forward = extractString(grid, startRow, startCol, wordLen, dirRow, dirCol);
+          if (forward.equals(word) || new StringBuilder(forward).reverse().toString().equals(word)) {
+            // Check the opposite direction from the found "MAS"
+            int oppositeRow = startRow + (wordLen - 1) * dirRow;
+            int oppositeCol = startCol + (wordLen - 1) * dirCol;
+            if (checkOppositeDiagonalForMAS(grid, oppositeRow, oppositeCol, dirRow, dirCol, word)) {
+              return true;
+            }
+          }
         }
       }
     }
 
-    // Check backward direction
-    boolean foundBackward = false;
-    for (int start = 1; start <= 2; start++) {
-      int newRow = row + start * dirRow;
-      int newCol = col + start * dirCol;
-      if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
-        String backward = extractString(grid, newRow, newCol, wordLen, -dirRow, -dirCol);
-        if (backward.equals(word) || new StringBuilder(backward).reverse().toString().equals(word)) {
-          foundBackward = true;
-          break;
+    return false;
+  }
+
+  private static boolean checkOppositeDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol, String word) {
+    // Check for "MAS" in the opposite diagonal direction
+    int wordLen = word.length();
+    int rows = grid.size();
+    int cols = grid.get(0).length();
+
+    for (int startRow = row - 2; startRow <= row + 2; startRow++) {
+      for (int startCol = col - 2; startCol <= col + 2; startCol++) {
+        if (startRow >= 0 && startRow < rows && startCol >= 0 && startCol < cols) {
+          String forward = extractString(grid, startRow, startCol, wordLen, -dirRow, dirCol);
+          if (forward.equals(word) || new StringBuilder(forward).reverse().toString().equals(word)) {
+            return true;
+          }
         }
       }
     }
 
-    return foundForward && foundBackward;
+    return false;
   }
 }
