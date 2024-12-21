@@ -14,25 +14,25 @@
             0
             matches)))
 
+(def input (parse-input "aoc24/day03.txt"))
+
 (defn part-1
   "Run with bb -x aoc24.day03/part-1"
-  [input]
-  (execute-mul input true))
+  [_]
+  (prn (execute-mul input true)))
 
 (defn part-2
   "Run with bb -x aoc24.day03/part-2"
-  [input]
-  (loop [lines (str/split-lines input)
-         sum 0
-         enabled? true]
-    (if (empty? lines)
-      sum
-      (let [line (first lines)
-            new-enabled? (cond
-                           (str/includes? line "do()") true
-                           (str/includes? line "don't()") false
-                           :else enabled?)
-            mul-result (execute-mul line new-enabled?)]
-        (recur (rest lines) (+ sum mul-result) new-enabled?)))))
-
-(def input (parse-input "aoc24/day03.txt"))
+  [_]
+  (prn (loop [lines (str/split-lines input)
+              sum 0
+              enabled? true]
+        (if (empty? lines)
+          sum
+          (let [line (first lines)
+                new-enabled? (cond
+                               (str/includes? line "do()") true
+                               (str/includes? line "don't()") false
+                               :else enabled?)
+                mul-result (execute-mul line new-enabled?)]
+            (recur (rest lines) (+ sum mul-result) new-enabled?))))))
