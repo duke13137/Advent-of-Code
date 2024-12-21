@@ -25,19 +25,18 @@
   (let [rows (count grid)
         cols (count (first grid))
         word-len (count word)
-        directions [[0 1] [1 0] [1 1] [1 -1]]]
-    (reduce
-     (fn [count row]
-       (+ count (reduce
-                 (fn [col-count col]
-                   (+ col-count (reduce
-                                 (fn [dir-count [dir-row dir-col]]
-                                   (let [forward (extract-string grid row col word-len dir-row dir-col)
-                                         backward (str/reverse forward)]
-                                     (+ dir-count (if (= forward word) 1 0) (if (= backward word) 1 0))))
-                                 0 directions)))
-                 0 (range cols))))
-     0 (range rows))))
+        directions [[0 1] [1 0] [1 1] [1 -1]]
+        mutable-count (atom 0)]
+    (doseq [row (range rows)]
+      (doseq [col (range cols)]
+        (doseq [[dir-row dir-col] directions]
+          (let [forward (extract-string grid row col word-len dir-row dir-col)
+                backward (str/reverse forward)]
+            (when (= forward word)
+              (swap! mutable-count inc))
+            (when (= backward word)
+              (swap! mutable-count inc))))))
+    @mutable-count))
 
 (defn- check-diagonal-pair [grid row col up-dir-row up-dir-col down-dir-row down-dir-col word reversed-word]
   (let [up-diag (extract-string grid (+ row up-dir-row) (+ col up-dir-col) (count word) up-dir-row up-dir-col)
