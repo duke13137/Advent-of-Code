@@ -74,8 +74,8 @@ public class Day04 {
     int cols = grid.get(0).length();
     long count = 0;
 
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < cols; col++) {
+    for (int row = 1; row < rows - 1; row++) {
+      for (int col = 1; col < cols - 1; col++) {
         if (isXMASShape(grid, row, col)) {
           count++;
         }
@@ -87,7 +87,7 @@ public class Day04 {
 
   private static boolean isXMASShape(List<String> grid, int row, int col) {
     // Check for "MAS" in both diagonal directions, allowing for overlap
-    return checkDiagonalForMAS(grid, row, col, 1, 1) && checkOppositeDiagonalForMAS(grid, row, col, -1, 1);
+    return checkDiagonalForMAS(grid, row, col, 1, 1) && checkDiagonalForMAS(grid, row, col, -1, 1);
   }
 
   private static boolean checkDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
@@ -97,20 +97,18 @@ public class Day04 {
     int rows = grid.size();
     int cols = grid.get(0).length();
 
-    // Start checking one position away from the center
-    int startRow = row + dirRow;
-    int startCol = col + dirCol;
+    for (int i = -wordLen + 1; i < wordLen; i++) {
+      int startRow = row - dirRow + i * dirRow;
+      int startCol = col - dirCol + i * dirCol;
 
-    if (startRow >= 0 && startRow < rows && startCol >= 0 && startCol < cols) {
-      String forward = extractString(grid, startRow, startCol, wordLen, dirRow, dirCol);
-      return forward.equals(word) || new StringBuilder(forward).reverse().toString().equals(word);
+      if (startRow >= 0 && startRow < rows - wordLen + 1 && startCol >= 0 && startCol < cols - wordLen + 1) {
+        String forward = extractString(grid, startRow, startCol, wordLen, dirRow, dirCol);
+        if (forward.equals(word) || new StringBuilder(forward).reverse().toString().equals(word)) {
+          return true;
+        }
+      }
     }
 
     return false;
-  }
-
-  private static boolean checkOppositeDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
-    // Check for "MAS" in the opposite diagonal direction
-    return checkDiagonalForMAS(grid, row, col, dirRow, dirCol);
   }
 }
