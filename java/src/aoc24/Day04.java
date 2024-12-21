@@ -93,15 +93,24 @@ public class Day04 {
         String word = "MAS";
         String reversedWord = new StringBuilder(word).reverse().toString();
     
-        // Check all four diagonal directions for "MAS" or "SAM"
-        int[][] directions = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
-        for (int[] dir : directions) {
-            String extracted = extractString(grid, row, col, word.length(), dir[0], dir[1]);
-            if (!extracted.equals(word) && !extracted.equals(reversedWord)) {
-                return false;
-            }
+        // Check diagonal pairs
+        boolean topLeftBottomRight = false;
+        boolean topRightBottomLeft = false;
+    
+        // Check top-left to bottom-right
+        String diag1 = extractString(grid, row - 1, col - 1, word.length(), -1, -1);
+        String diag2 = extractString(grid, row + 1, col + 1, word.length(), 1, 1);
+        if ((diag1.equals(word) || diag1.equals(reversedWord)) && (diag2.equals(word) || diag2.equals(reversedWord))) {
+            topLeftBottomRight = true;
         }
     
-        return true;
+        // Check top-right to bottom-left
+        String diag3 = extractString(grid, row - 1, col + 1, word.length(), -1, 1);
+        String diag4 = extractString(grid, row + 1, col - 1, word.length(), 1, -1);
+        if ((diag3.equals(word) || diag3.equals(reversedWord)) && (diag4.equals(word) || diag4.equals(reversedWord))) {
+            topRightBottomLeft = true;
+        }
+    
+        return topLeftBottomRight && topRightBottomLeft;
     }
 }
