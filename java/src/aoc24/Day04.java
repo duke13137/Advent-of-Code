@@ -93,9 +93,9 @@ public class Day04 {
 
     // Check for "MAS" in all four diagonal directions
     return checkDiagonalForMAS(grid, row, col, -1, -1) &&
-           checkDiagonalForMAS(grid, row, col, -1, 1) &&
-           checkDiagonalForMAS(grid, row, col, 1, -1) &&
-           checkDiagonalForMAS(grid, row, col, 1, 1);
+        checkDiagonalForMAS(grid, row, col, -1, 1) &&
+        checkDiagonalForMAS(grid, row, col, 1, -1) &&
+        checkDiagonalForMAS(grid, row, col, 1, 1);
   }
 
   private static boolean checkDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {

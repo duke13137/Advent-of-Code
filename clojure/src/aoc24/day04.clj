@@ -38,17 +38,23 @@
               (swap! mutable-count inc))))))
     @mutable-count))
 
-(defn- check-diagonal-pair [grid row col up-dir-row up-dir-col down-dir-row down-dir-col word reversed-word]
-  (let [up-diag (extract-string grid (+ row up-dir-row) (+ col up-dir-col) (count word) up-dir-row up-dir-col)
-        down-diag (extract-string grid (+ row down-dir-row) (+ col down-dir-col) (count word) down-dir-row down-dir-col)]
-    (and (or (= up-diag word) (= up-diag reversed-word))
-         (or (= down-diag word) (= down-diag reversed-word)))))
+(defn- check-diagonal-for-mas [grid row col dir-row dir-col]
+  (let [word "MAS"
+        reversed-word (str/reverse word)
+        start-row (- row dir-row)
+        start-col (- col dir-col)
+        diagonal-str (extract-string grid start-row start-col (count word) dir-row dir-col)]
+    (or (= diagonal-str word) (= diagonal-str reversed-word))))
 
 (defn- is-xmas-shape [grid row col]
-  (let [word "MAS"
-        reversed-word (str/reverse word)]
-    (or (check-diagonal-pair grid row col -1 -1 1 1 word reversed-word)
-        (check-diagonal-pair grid row col -1 1 1 -1 word reversed-word))))
+  (let [center-char (get-in grid [row col])]
+    (if (not= center-char \A)
+      false
+      (and
+       (check-diagonal-for-mas grid row col -1 -1)
+       (check-diagonal-for-mas grid row col -1 1)
+       (check-diagonal-for-mas grid row col 1 -1)
+       (check-diagonal-for-mas grid row col 1 1)))))
 
 (defn count-xmas-shapes [grid]
   (let [rows (count grid)
