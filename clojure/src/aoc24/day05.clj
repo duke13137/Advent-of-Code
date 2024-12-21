@@ -89,7 +89,7 @@
 (defn part-2
   "Run with bb -x aoc24.day05/part-2"
   [_]
-   (let [[rules-lines _ updates-lines] (partition-by str/blank? input)
+  (let [[rules-lines _ updates-lines] (partition-by str/blank? input)
         rules-str (str/join "\n" rules-lines)
         updates-str (str/join "\n" updates-lines)]
-    (prn (solve-part-2 rules-str updates-str))))
+   (prn (solve-part-2 rules-str updates-str))))
