@@ -1,8 +1,12 @@
 (ns aoc24.day04
-  (:require [clojure.string :as str]))
+  (:require
+   [clojure.java.io :as io]
+   [clojure.string :as str]))
 
 (defn parse-grid [input]
   (str/split-lines input))
+
+(def input (parse-grid (slurp (io/resource "aoc24/day01.txt"))))
 
 (defn- extract-string [grid row col word-len dir-row dir-col]
   (let [rows (count grid)
@@ -59,8 +63,8 @@
                  0 (range 1 (- cols 1)))))
      0 (range 1 (- rows 1)))))
 
-(defn part1 [input]
+(defn part-1 [input]
   (count-occurrences (parse-grid input) "XMAS"))
 
-(defn part2 [input]
+(defn part-2 [input]
   (count-xmas-shapes (parse-grid input)))
