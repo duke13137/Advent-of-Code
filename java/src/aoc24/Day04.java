@@ -91,19 +91,19 @@ public class Day04 {
         if (grid.get(row).charAt(col) != 'A') return false;
 
         // Check top-left
-        String topLeft = extractString(grid, row - 1, col - 1, wordLen, 0, -1);
+        String topLeft = extractString(grid, row - 1, col - 1, wordLen, -1, -1);
         if (!topLeft.equals(word) && !topLeft.equals(new StringBuilder(word).reverse().toString())) return false;
 
         // Check top-right
-        String topRight = extractString(grid, row - 1, col + 1, wordLen, 0, 1);
+        String topRight = extractString(grid, row - 1, col + 1, wordLen, -1, 1);
         if (!topRight.equals(word) && !topRight.equals(new StringBuilder(word).reverse().toString())) return false;
 
         // Check bottom-left
-        String bottomLeft = extractString(grid, row + 1, col - 1, wordLen, 0, -1);
+        String bottomLeft = extractString(grid, row + 1, col - 1, wordLen, 1, -1);
         if (!bottomLeft.equals(word) && !bottomLeft.equals(new StringBuilder(word).reverse().toString())) return false;
 
         // Check bottom-right
-        String bottomRight = extractString(grid, row + 1, col + 1, wordLen, 0, 1);
+        String bottomRight = extractString(grid, row + 1, col + 1, wordLen, 1, 1);
         if (!bottomRight.equals(word) && !bottomRight.equals(new StringBuilder(word).reverse().toString())) return false;
 
         return true;
