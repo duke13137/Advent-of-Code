@@ -33,7 +33,7 @@
   (->> updates
        (filter #(validate-update % rules))
        (mapcat middle-pages)
-       (apply +)))
+       (reduce + 0)))
 
 (defn solve [rules-str updates-str]
   (let [rules (parse-rules rules-str)
