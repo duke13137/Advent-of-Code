@@ -86,7 +86,9 @@ public class Day04 {
   }
 
   private static boolean isXMASShape(List<String> grid, int row, int col) {
-    return checkDiagonalForMAS(grid, row, col, 1, 1) && checkOppositeDiagonalForMAS(grid, row, col, -1, 1);
+    return (checkDiagonalForMAS(grid, row, col, 1, 1) || checkDiagonalForMAS(grid, row, col, -1, -1))
+        && (checkOppositeDiagonalForMAS(grid, row, col, -1, 1)
+            || checkOppositeDiagonalForMAS(grid, row, col, 1, -1));
   }
 
   private static boolean checkDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
@@ -99,10 +101,17 @@ public class Day04 {
     int startRow = row - dirRow;
     int startCol = col - dirCol;
 
-    if (startRow >= 0 && startRow < rows - wordLen + 1 && startCol >= 0 && startCol < cols - wordLen + 1) {
-      String forward = extractString(grid, startRow, startCol, wordLen, dirRow, dirCol);
-      String backward = new StringBuilder(forward).reverse().toString();
-      return forward.equals(word) || backward.equals(word);
+    for (int i = 0; i < wordLen; i++) {
+      int newRow = startRow + i * dirRow;
+      int newCol = startCol + i * dirCol;
+
+      if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
+        String forward = extractString(grid, newRow, newCol, wordLen, dirRow, dirCol);
+        String backward = new StringBuilder(forward).reverse().toString();
+        if (forward.equals(word) || backward.equals(word)) {
+          return true;
+        }
+      }
     }
 
     return false;
