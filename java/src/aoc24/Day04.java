@@ -86,12 +86,18 @@ public class Day04 {
   }
 
   private static boolean isXMASShape(List<String> grid, int row, int col) {
-    // Check for "MAS" in both diagonal directions, allowing for overlap
-    return checkDiagonalForMAS(grid, row, col, 1, 1) && checkDiagonalForMAS(grid, row, col, -1, 1);
+    int[] mas1 = checkDiagonalForMAS(grid, row, col, 1, 1);
+    int[] mas2 = checkOppositeDiagonalForMAS(grid, row, col, -1, 1);
+
+    if (mas1 != null && mas2 != null) {
+      // Check if the two MAS sequences intersect at a common point
+      return mas1[1] == mas2[1] && mas1[4] == mas2[4];
+    }
+
+    return false;
   }
 
-  private static boolean checkDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
-    // Check for "MAS" in one diagonal direction
+  private static int[] checkDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
     String word = "MAS";
     int wordLen = word.length();
     int rows = grid.size();
@@ -104,11 +110,16 @@ public class Day04 {
       if (startRow >= 0 && startRow < rows - wordLen + 1 && startCol >= 0 && startCol < cols - wordLen + 1) {
         String forward = extractString(grid, startRow, startCol, wordLen, dirRow, dirCol);
         if (forward.equals(word) || new StringBuilder(forward).reverse().toString().equals(word)) {
-          return true;
+          return new int[] { startRow, startCol, startRow + dirRow, startCol + dirCol,
+              startRow + 2 * dirRow, startCol + 2 * dirCol };
         }
       }
     }
 
-    return false;
+    return null;
+  }
+
+  private static int[] checkOppositeDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
+    return checkDiagonalForMAS(grid, row, col, dirRow, dirCol);
   }
 }
