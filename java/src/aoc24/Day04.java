@@ -84,28 +84,24 @@ public class Day04 {
     }
 
     private static boolean isXMASShape(List<String> grid, int row, int col) {
+        // Check for 'A' in the center
+        if (grid.get(row).charAt(col) != 'A') {
+            return false;
+        }
+    
+        // Define the word and its reverse
         String word = "MAS";
-        int wordLen = word.length();
-
-        // Check for X-shape
-        if (grid.get(row).charAt(col) != 'A') return false;
-
-        // Check top-left
-        String topLeft = extractString(grid, row - 1, col - 1, wordLen, -1, -1);
-        if (!topLeft.equals(word) && !topLeft.equals(new StringBuilder(word).reverse().toString())) return false;
-
-        // Check top-right
-        String topRight = extractString(grid, row - 1, col + 1, wordLen, -1, 1);
-        if (!topRight.equals(word) && !topRight.equals(new StringBuilder(word).reverse().toString())) return false;
-
-        // Check bottom-left
-        String bottomLeft = extractString(grid, row + 1, col - 1, wordLen, 1, -1);
-        if (!bottomLeft.equals(word) && !bottomLeft.equals(new StringBuilder(word).reverse().toString())) return false;
-
-        // Check bottom-right
-        String bottomRight = extractString(grid, row + 1, col + 1, wordLen, 1, 1);
-        if (!bottomRight.equals(word) && !bottomRight.equals(new StringBuilder(word).reverse().toString())) return false;
-
+        String reversedWord = new StringBuilder(word).reverse().toString();
+    
+        // Check all four diagonal directions for "MAS" or "SAM"
+        int[][] directions = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+        for (int[] dir : directions) {
+            String extracted = extractString(grid, row, col, word.length(), dir[0], dir[1]);
+            if (!extracted.equals(word) && !extracted.equals(reversedWord)) {
+                return false;
+            }
+        }
+    
         return true;
     }
 }
