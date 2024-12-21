@@ -86,21 +86,17 @@ public class Day04 {
   }
 
   private static boolean isXMASShape(List<String> grid, int row, int col) {
-    // Define the word and its reverse
     String word = "MAS";
-    String reversedWord = new StringBuilder(word).reverse().toString();
-
-    // Check if the current position can be the top-left of an X-MAS shape
-    return checkDiagonalPair(grid, row, col, 0, 0, 2, 2, word, reversedWord) ||
-           checkDiagonalPair(grid, row, col, 0, 2, 2, 0, word, reversedWord);
+    // Check for MAS in both diagonals, both forward and backward
+    return (checkDiagonal(grid, row, col, 1, 1, word) || checkDiagonal(grid, row, col, 1, 1, new StringBuilder(word).reverse().toString())) &&
+           (checkDiagonal(grid, row, col, 1, -1, word) || checkDiagonal(grid, row, col, 1, -1, new StringBuilder(word).reverse().toString()));
   }
 
-  private static boolean checkDiagonalPair(List<String> grid, int row, int col, int upDirRow, int upDirCol,
-      int downDirRow, int downDirCol, String word, String reversedWord) {
-    String upDiag = extractString(grid, row, col, word.length(), upDirRow, upDirCol);
-    String downDiag = extractString(grid, row + downDirRow - upDirRow, col + downDirCol - upDirCol, word.length(), downDirRow - upDirRow, downDirCol - upDirCol);
+  private static boolean checkDiagonal(List<String> grid, int row, int col, int dirRow, int dirCol, String word) {
+    // Extract the string in the given diagonal direction
+    String diagonal = extractString(grid, row, col, 3, dirRow, dirCol);
 
-    return (upDiag.equals(word) || upDiag.equals(reversedWord))
-        && (downDiag.equals(word) || downDiag.equals(reversedWord));
+    // Check if the extracted string is equal to the word
+    return diagonal.equals(word);
   }
 }
