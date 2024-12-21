@@ -10,14 +10,14 @@
   ([include]
    (ConsoleLauncher/run stdout stderr
                         (into-array String ["execute" "--disable-banner" "--scan-classpath"
-                                            "-cp" "target/classes:target/test-classes"
+                                            "-cp" "java/target/classes:java/target/test-classes"
                                             "-n" include]))))
 
 (require '[clj-reload.core :as reload])
-(reload/init {:dirs ["dev" "src"]})
+(reload/init {:dirs ["clojure/src"]})
 
 (require 'virgil)
-(virgil/watch-and-recompile ["src" "test"]
+(virgil/watch-and-recompile ["java/src" "java/test"]
                             :options ["-Xlint:unchecked"]
                             :post-hook junit
                             :verbose true)
