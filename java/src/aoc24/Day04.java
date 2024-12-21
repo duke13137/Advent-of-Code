@@ -92,11 +92,13 @@ public class Day04 {
     }
 
     // Check for "MAS" in all four diagonal directions
-    // AI! refactor this to use a for loop
-    return checkDiagonalForMAS(grid, row, col, -1, -1) &&
-        checkDiagonalForMAS(grid, row, col, -1, 1) &&
-        checkDiagonalForMAS(grid, row, col, 1, -1) &&
-        checkDiagonalForMAS(grid, row, col, 1, 1);
+    int[][] directions = { { -1, -1 }, { -1, 1 }, { 1, -1 }, { 1, 1 } };
+    for (int[] dir : directions) {
+      if (!checkDiagonalForMAS(grid, row, col, dir[0], dir[1])) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private static boolean checkDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
