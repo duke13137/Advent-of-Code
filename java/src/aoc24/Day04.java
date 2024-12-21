@@ -13,6 +13,9 @@ public class Day04 {
 
         long part1Result = countOccurrences(input);
         System.out.println("Part 1: " + part1Result);
+
+        long part2Result = countXMASShapes(input);
+        System.out.println("Part 2: " + part2Result);
     }
 
     public static long countOccurrences(List<String> grid) {
@@ -62,5 +65,47 @@ public class Day04 {
             }
         }
         return sb.toString();
+    }
+
+    public static long countXMASShapes(List<String> grid) {
+        int rows = grid.size();
+        int cols = grid.get(0).length();
+        long count = 0;
+
+        for (int row = 1; row < rows - 1; row++) {
+            for (int col = 1; col < cols - 1; col++) {
+                if (isXMASShape(grid, row, col)) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private static boolean isXMASShape(List<String> grid, int row, int col) {
+        String word = "MAS";
+        int wordLen = word.length();
+
+        // Check for X-shape
+        if (grid.get(row).charAt(col) != 'A') return false;
+
+        // Check top-left
+        String topLeft = extractString(grid, row - 1, col - 1, wordLen, 0, -1);
+        if (!topLeft.equals(word) && !topLeft.equals(new StringBuilder(word).reverse().toString())) return false;
+
+        // Check top-right
+        String topRight = extractString(grid, row - 1, col + 1, wordLen, 0, 1);
+        if (!topRight.equals(word) && !topRight.equals(new StringBuilder(word).reverse().toString())) return false;
+
+        // Check bottom-left
+        String bottomLeft = extractString(grid, row + 1, col - 1, wordLen, 0, -1);
+        if (!bottomLeft.equals(word) && !bottomLeft.equals(new StringBuilder(word).reverse().toString())) return false;
+
+        // Check bottom-right
+        String bottomRight = extractString(grid, row + 1, col + 1, wordLen, 0, 1);
+        if (!bottomRight.equals(word) && !bottomRight.equals(new StringBuilder(word).reverse().toString())) return false;
+
+        return true;
     }
 }
