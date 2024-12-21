@@ -86,40 +86,29 @@ public class Day04 {
   }
 
   private static boolean isXMASShape(List<String> grid, int row, int col) {
-    int[] mas1 = checkDiagonalForMAS(grid, row, col, 1, 1);
-    int[] mas2 = checkOppositeDiagonalForMAS(grid, row, col, -1, 1);
-
-    if (mas1 != null && mas2 != null) {
-      // Check if the two MAS sequences intersect at a common point
-      return mas1[1] == mas2[1] && mas1[4] == mas2[4];
-    }
-
-    return false;
+    return checkDiagonalForMAS(grid, row, col, 1, 1) && checkOppositeDiagonalForMAS(grid, row, col, -1, 1);
   }
 
-  private static int[] checkDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
+  private static boolean checkDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
     String word = "MAS";
     int wordLen = word.length();
     int rows = grid.size();
     int cols = grid.get(0).length();
 
-    for (int i = -wordLen + 1; i < wordLen; i++) {
-      int startRow = row - dirRow + i * dirRow;
-      int startCol = col - dirCol + i * dirCol;
+    // Start checking one position away from the center
+    int startRow = row - dirRow;
+    int startCol = col - dirCol;
 
-      if (startRow >= 0 && startRow < rows - wordLen + 1 && startCol >= 0 && startCol < cols - wordLen + 1) {
-        String forward = extractString(grid, startRow, startCol, wordLen, dirRow, dirCol);
-        if (forward.equals(word) || new StringBuilder(forward).reverse().toString().equals(word)) {
-          return new int[] { startRow, startCol, startRow + dirRow, startCol + dirCol,
-              startRow + 2 * dirRow, startCol + 2 * dirCol };
-        }
-      }
+    if (startRow >= 0 && startRow < rows - wordLen + 1 && startCol >= 0 && startCol < cols - wordLen + 1) {
+      String forward = extractString(grid, startRow, startCol, wordLen, dirRow, dirCol);
+      String backward = new StringBuilder(forward).reverse().toString();
+      return forward.equals(word) || backward.equals(word);
     }
 
-    return null;
+    return false;
   }
 
-  private static int[] checkOppositeDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
+  private static boolean checkOppositeDiagonalForMAS(List<String> grid, int row, int col, int dirRow, int dirCol) {
     return checkDiagonalForMAS(grid, row, col, dirRow, dirCol);
   }
 }
