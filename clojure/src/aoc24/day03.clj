@@ -21,27 +21,29 @@
   [_]
   (prn (execute-mul input true)))
 
+(defn- process-segment [input enabled? sum]
+  (let [do-index (str/index-of input "do()")
+        dont-index (str/index-of input "don't()")
+        [next-index new-enabled?] (condp = [do-index dont-index]
+                                    [nil nil] [nil enabled?]
+                                    [nil 0] [dont-index false]
+                                    [0 nil] [do-index true]
+                                    (if (< do-index dont-index)
+                                      [do-index true]
+                                      [dont-index false]))]
+    (if (nil? next-index)
+      [(+ sum (execute-mul input enabled?)) enabled?]
+      [(+ sum (execute-mul (subs input 0 next-index) enabled?))
+       new-enabled?
+       (subs input (+ next-index (if new-enabled? 4 6)))])))
+
 (defn part-2
   "Run with bb -x aoc24.day03/part-2"
   [_]
-  (prn (loop [input input
-              sum 0
-              enabled? true]
-        (let [do-index (str/index-of input "do()")
-              dont-index (str/index-of input "don't()")
-              next-index (cond
-                           (and do-index (or (nil? dont-index) (< do-index dont-index)))
-                           do-index
-
-                           (and dont-index (or (nil? do-index) (< dont-index do-index)))
-                           dont-index
-
-                           :else
-                           nil)]
-          (if (nil? next-index)
-            (+ sum (execute-mul input enabled?))
-            (let [mul-result (execute-mul (subs input 0 next-index) enabled?)
-                  new-enabled? (if (= next-index do-index) true false)
-                  remaining-input (subs input (+ next-index (if (= next-index do-index) 4 6)))]
-              (recur remaining-input (+ sum mul-result) new-enabled?)))))))
-
+  (loop [input input
+         sum 0
+         enabled? true]
+    (let [[new-sum new-enabled? remaining-input] (process-segment input enabled? sum)]
+      (if (nil? remaining-input)
+        (prn new-sum)
+        (recur remaining-input new-sum new-enabled?)))))
