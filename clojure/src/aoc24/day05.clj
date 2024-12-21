@@ -1,7 +1,6 @@
 (ns aoc24.day05
   (:require [clojure.java.io :as io]
-            [clojure.string :as str]
-            [clojure.set :as set]))
+            [clojure.string :as str]))
 
 (def input (->> (slurp (io/resource "aoc24/day05.txt"))
                 (str/split-lines)))
@@ -47,4 +46,7 @@
 (defn part-1
   "Run with bb -x aoc24.day05/part-1"
   [_]
-  (prn (solve rules-str updates-str)))
+  (let [[rules-lines _ updates-lines] (partition-by str/blank? input)
+        rules-str (str/join "\n" rules-lines)
+        updates-str (str/join "\n" updates-lines)]
+    (prn (solve rules-str updates-str))))
