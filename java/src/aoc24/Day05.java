@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class Day05 {
 
@@ -24,56 +21,81 @@ public class Day05 {
         System.out.println("Part 2: " + part2Result);
     }
 
-
     public static List<List<Long>> parseRules(String rulesStr) {
-        return Arrays.stream(rulesStr.split("\n"))
-                .map(ruleStr -> {
-                    String[] parts = ruleStr.split("\\|");
-                    return Arrays.asList(Long.parseLong(parts[0]), Long.parseLong(parts[1]));
-                })
-                .collect(Collectors.toList());
+        List<List<Long>> rules = new ArrayList<>();
+        String[] lines = rulesStr.split("\n");
+        for (String line : lines) {
+            String[] parts = line.split("\\|");
+            List<Long> rule = new ArrayList<>();
+            rule.add(Long.parseLong(parts[0]));
+            rule.add(Long.parseLong(parts[1]));
+            rules.add(rule);
+        }
+        return rules;
     }
 
     public static List<Long> parseUpdate(String updateStr) {
-        return Arrays.stream(updateStr.split(","))
-                .map(Long::parseLong)
-                .collect(Collectors.toList());
+        List<Long> update = new ArrayList<>();
+        String[] parts = updateStr.split(",");
+        for (String part : parts) {
+            update.add(Long.parseLong(part));
+        }
+        return update;
     }
 
     public static List<List<Long>> parseUpdates(String updatesStr) {
-        return Arrays.stream(updatesStr.split("\n"))
-                .map(Day05::parseUpdate)
-                .collect(Collectors.toList());
+        List<List<Long>> updates = new ArrayList<>();
+        String[] lines = updatesStr.split("\n");
+        for (String line : lines) {
+            updates.add(parseUpdate(line));
+        }
+        return updates;
     }
 
-
     public static List<List<Long>> applicableRules(List<Long> update, List<List<Long>> rules) {
-        return rules.stream()
-                .filter(rule -> update.contains(rule.get(0)) && update.contains(rule.get(1)))
-                .collect(Collectors.toList());
+        List<List<Long>> appRules = new ArrayList<>();
+        for (List<Long> rule : rules) {
+            if (update.contains(rule.get(0)) && update.contains(rule.get(1))) {
+                appRules.add(rule);
+            }
+        }
+        return appRules;
     }
 
     public static boolean validateUpdate(List<Long> update, List<List<Long>> rules) {
         List<List<Long>> appRules = applicableRules(update, rules);
-        return appRules.stream().allMatch(rule -> update.indexOf(rule.get(0)) < update.indexOf(rule.get(1)));
+        for (List<Long> rule : appRules) {
+            if (update.indexOf(rule.get(0)) >= update.indexOf(rule.get(1))) {
+                return false;
+            }
+        }
+        return true;
     }
-
 
     public static List<Long> middlePages(List<Long> update) {
         int len = update.size();
         int mid = len / 2;
+        List<Long> result = new ArrayList<>();
         if (len % 2 == 1) {
-            return Collections.singletonList(update.get(mid));
+            result.add(update.get(mid));
         } else {
-            return Arrays.asList(update.get(mid - 1), update.get(mid));
+            result.add(update.get(mid - 1));
+            result.add(update.get(mid));
         }
+        return result;
     }
 
     public static long sumMiddlePages(List<List<Long>> updates, List<List<Long>> rules) {
-        return updates.stream()
-                .filter(update -> validateUpdate(update, rules))
-                .flatMap(update -> middlePages(update).stream())
-                .reduce(0L, Long::sum);
+        long sum = 0;
+        for (List<Long> update : updates) {
+            if (validateUpdate(update, rules)) {
+                List<Long> middle = middlePages(update);
+                for (Long page : middle) {
+                    sum += page;
+                }
+            }
+        }
+        return sum;
     }
 
     public static List<Long> correctUpdate(List<Long> update, List<List<Long>> rules) {
@@ -82,23 +104,28 @@ public class Day05 {
 
         while (!remainingUpdate.isEmpty()) {
             Long nextVal = remainingUpdate.remove(0);
-            List<List<Long>> relevantRules = rules.stream()
-                    .filter(rule -> rule.contains(nextVal))
-                    .collect(Collectors.toList());
+            List<List<Long>> relevantRules = new ArrayList<>();
+            for (List<Long> rule : rules) {
+                if (rule.contains(nextVal)) {
+                    relevantRules.add(rule);
+                }
+            }
 
             int correctIndex = 0;
             for (int i = 0; i <= sortedUpdate.size(); i++) {
-                int finalI = i;
-                boolean validPlacement = relevantRules.stream().allMatch(rule -> {
-                    List<Long> testUpdate = new ArrayList<>(sortedUpdate.subList(0, finalI));
+                boolean validPlacement = true;
+                for (List<Long> rule : relevantRules) {
+                    List<Long> testUpdate = new ArrayList<>(sortedUpdate.subList(0, i));
                     testUpdate.add(nextVal);
-                    testUpdate.addAll(sortedUpdate.subList(finalI, sortedUpdate.size()));
+                    testUpdate.addAll(sortedUpdate.subList(i, sortedUpdate.size()));
 
                     if (testUpdate.contains(rule.get(0)) && testUpdate.contains(rule.get(1))) {
-                        return testUpdate.indexOf(rule.get(0)) < testUpdate.indexOf(rule.get(1));
+                        if (testUpdate.indexOf(rule.get(0)) >= testUpdate.indexOf(rule.get(1))) {
+                            validPlacement = false;
+                            break;
+                        }
                     }
-                    return true;
-                });
+                }
                 if (validPlacement) {
                     correctIndex = i;
                     break;
@@ -109,22 +136,25 @@ public class Day05 {
         return sortedUpdate;
     }
 
-
     public static long sumMiddlePagesCorrected(List<List<Long>> updates, List<List<Long>> rules) {
-        return updates.stream()
-                .filter(update -> !validateUpdate(update, rules))
-                .map(update -> correctUpdate(update, rules))
-                .flatMap(correctedUpdate -> middlePages(correctedUpdate).stream())
-                .reduce(0L, Long::sum);
+        long sum = 0;
+        for (List<Long> update : updates) {
+            if (!validateUpdate(update, rules)) {
+                List<Long> correctedUpdate = correctUpdate(update, rules);
+                List<Long> middle = middlePages(correctedUpdate);
+                for (Long page : middle) {
+                    sum += page;
+                }
+            }
+        }
+        return sum;
     }
-
 
     public static long solve(String rulesStr, String updatesStr) {
         List<List<Long>> rules = parseRules(rulesStr);
         List<List<Long>> updates = parseUpdates(updatesStr);
         return sumMiddlePages(updates, rules);
     }
-
 
     public static long solvePart2(String rulesStr, String updatesStr) {
         List<List<Long>> rules = parseRules(rulesStr);
