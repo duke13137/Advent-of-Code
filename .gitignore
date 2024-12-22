@@ -17,3 +17,4 @@ java/.settings
 java/target
 **/resources
 .calva
+.portal/

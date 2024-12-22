@@ -7,7 +7,6 @@
                 (map #(str/split % #"\s+"))
                 (apply map vector)
                 (map #(map parse-long %))))
-
 (defn part-1
   [_]
   (->> input

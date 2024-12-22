@@ -50,3 +50,11 @@
       (if (nil? remaining-input)
         (prn new-sum)
         (recur remaining-input new-sum new-enabled?)))))
+
+(comment
+
+  (part-1 nil)
+  (part-2 nil)
+
+  'comment)  
+  
