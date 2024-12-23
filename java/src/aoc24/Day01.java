@@ -68,9 +68,8 @@ public class Day01 {
 
     return totalDistance;
   }
-}
 
-class InvalidInputFormatException extends Exception {
+  static class InvalidInputFormatException extends Exception {
 
     public InvalidInputFormatException(String message) {
       super(message);
