@@ -7,8 +7,6 @@ import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Day01 {
 
@@ -24,7 +22,9 @@ public class Day01 {
   }
 
   public static long calculateTotalDistance(Path inputPath) throws IOException, InvalidInputFormatException {
+
     List<int[]> pairs = new ArrayList<>();
+    // AI! use FIles.lines() instead of Files.newBufferedReader() and readLine()
     try (BufferedReader reader = Files.newBufferedReader(inputPath)) {
       String line;
       while ((line = reader.readLine()) != null) {
@@ -53,6 +53,7 @@ public class Day01 {
       departures[i] = pairs.get(i)[0];
       arrivals[i] = pairs.get(i)[1];
     }
+    // AI! make above block of code more efficient!
     Arrays.sort(departures);
     Arrays.sort(arrivals);
 
