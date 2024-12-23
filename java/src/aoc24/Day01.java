@@ -20,27 +20,49 @@ public class Day01 {
     }
   }
 
-  // AI! refactor to use imperative style.
   public static long calculateTotalDistance(Path inputPath) throws IOException, InvalidInputFormatException {
-    int[][] pairs = Files.lines(inputPath)
-        .map(line -> line.split("\\s+"))
-        .map(parts -> new int[] { Integer.parseInt(parts[0]), Integer.parseInt(parts[1]) })
-        .toArray(int[][]::new);
+    List<int[]> pairs = new ArrayList<>();
+    try (BufferedReader reader = Files.newBufferedReader(inputPath)) {
+      String line;
+      while ((line = reader.readLine()) != null) {
+        String[] parts = line.split("\\s+");
+        if (parts.length == 2) {
+          try {
+            int departure = Integer.parseInt(parts[0]);
+            int arrival = Integer.parseInt(parts[1]);
+            pairs.add(new int[] { departure, arrival });
+          } catch (NumberFormatException e) {
+            throw new InvalidInputFormatException("Invalid number format in line: " + line);
+          }
+        } else {
+          throw new InvalidInputFormatException("Each line must contain exactly two numbers separated by whitespace.");
+        }
+      }
+    }
 
-    if (pairs.length == 0) {
+    if (pairs.isEmpty()) {
       throw new InvalidInputFormatException("Input file is empty or contains no valid lines.");
     }
 
-    int[] departures = Arrays.stream(pairs).mapToInt(p -> p[0]).sorted().toArray();
-    int[] arrivals = Arrays.stream(pairs).mapToInt(p -> p[1]).sorted().toArray();
+    int[] departures = new int[pairs.size()];
+    int[] arrivals = new int[pairs.size()];
+    for (int i = 0; i < pairs.size(); i++) {
+      departures[i] = pairs.get(i)[0];
+      arrivals[i] = pairs.get(i)[1];
+    }
+    Arrays.sort(departures);
+    Arrays.sort(arrivals);
 
     if (departures.length != arrivals.length) {
       throw new InvalidInputFormatException("Unequal number of departure and arrival times.");
     }
 
-    return IntStream.range(0, departures.length).boxed()
-        .collect(Collectors.summingLong(i -> Math.abs(departures[i] - arrivals[i])));
+    long totalDistance = 0;
+    for (int i = 0; i < departures.length; i++) {
+      totalDistance += Math.abs(departures[i] - arrivals[i]);
+    }
 
+    return totalDistance;
   }
 
   static class InvalidInputFormatException extends Exception {
