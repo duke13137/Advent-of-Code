@@ -6,6 +6,9 @@
     <artifactId>AoC</artifactId>
     <version>0.1.0</version>
     <name>AoC</name>
+    <properties>
+        <maven.compiler.release>17</maven.compiler.release>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.clojure</groupId>
@@ -36,6 +39,16 @@
     <build>
         <sourceDirectory>src</sourceDirectory>
         <testSourceDirectory>test</testSourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.12.1</version>
+                <configuration>
+                    <release>21</release>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
     <repositories>
         <repository>
