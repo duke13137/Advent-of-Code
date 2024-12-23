@@ -13,6 +13,7 @@
                :when (some #{char} [\^ \> \v \<])]
            [(vector r c) char])))
 
+;; -- AI! refactor this to be idiomatic Clojure
 (defn move-guard [grid pos direction]
   (let [height (count grid)
         width (count (first grid))
