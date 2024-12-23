@@ -23,37 +23,33 @@ public class Day01 {
 
   public static long calculateTotalDistance(Path inputPath) throws IOException, InvalidInputFormatException {
 
-    List<int[]> pairs = new ArrayList<>();
-    // AI! use FIles.lines() instead of Files.newBufferedReader() and readLine()
-    try (BufferedReader reader = Files.newBufferedReader(inputPath)) {
-      String line;
-      while ((line = reader.readLine()) != null) {
-        String[] parts = line.split("\\s+");
-        if (parts.length == 2) {
+    List<int[]> pairs = Files.lines(inputPath)
+        .map(line -> line.split("\\s+"))
+        .filter(parts -> parts.length == 2)
+        .map(parts -> {
           try {
             int departure = Integer.parseInt(parts[0]);
             int arrival = Integer.parseInt(parts[1]);
-            pairs.add(new int[] { departure, arrival });
+            return new int[] { departure, arrival };
           } catch (NumberFormatException e) {
-            throw new InvalidInputFormatException("Invalid number format in line: " + line);
+            throw new RuntimeException("Invalid number format in line", e);
           }
-        } else {
-          throw new InvalidInputFormatException("Each line must contain exactly two numbers separated by whitespace.");
-        }
+        })
+        .toList();
+    } catch (RuntimeException e) {
+      if (e.getCause() instanceof NumberFormatException) {
+        throw new InvalidInputFormatException(e.getCause().getMessage());
       }
+      throw e;
     }
 
     if (pairs.isEmpty()) {
       throw new InvalidInputFormatException("Input file is empty or contains no valid lines.");
     }
 
-    int[] departures = new int[pairs.size()];
-    int[] arrivals = new int[pairs.size()];
-    for (int i = 0; i < pairs.size(); i++) {
-      departures[i] = pairs.get(i)[0];
-      arrivals[i] = pairs.get(i)[1];
-    }
-    // AI! make above block of code more efficient!
+    int[] departures = pairs.stream().mapToInt(pair -> pair[0]).toArray();
+    int[] arrivals = pairs.stream().mapToInt(pair -> pair[1]).toArray();
+
     Arrays.sort(departures);
     Arrays.sort(arrivals);
 
