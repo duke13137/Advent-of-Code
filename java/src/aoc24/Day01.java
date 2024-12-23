@@ -20,6 +20,7 @@ public class Day01 {
     }
   }
 
+  // AI! refactor to use imperative style.
   public static long calculateTotalDistance(Path inputPath) throws IOException, InvalidInputFormatException {
     int[][] pairs = Files.lines(inputPath)
         .map(line -> line.split("\\s+"))
