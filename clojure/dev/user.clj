@@ -18,7 +18,7 @@
 
 (require 'virgil)
 (virgil/watch-and-recompile ["java/src" "java/test"]
-                            :options ["--source" "21" "-Xlint:unchecked"]
+                            :options ["--release" "21" "-Xlint:unchecked"]
                             :post-hook junit
                             :verbose true)
 

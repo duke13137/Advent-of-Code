@@ -28,8 +28,8 @@ public class Day05 {
         for (String line : lines) {
             String[] parts = line.split("\\|");
             List<Long> rule = new ArrayList<>();
-            rule.add(Long.parseLong(parts[0]));
-            rule.add(Long.parseLong(parts[1]));
+            rule.add(Long.valueOf(parts[0]));
+            rule.add(Long.valueOf(parts[1]));
             rules.add(rule);
         }
         return rules;
@@ -39,7 +39,7 @@ public class Day05 {
         List<Long> update = new ArrayList<>();
         String[] parts = updateStr.split(",");
         for (String part : parts) {
-            update.add(Long.parseLong(part));
+            update.add(Long.valueOf(part));
         }
         return update;
     }

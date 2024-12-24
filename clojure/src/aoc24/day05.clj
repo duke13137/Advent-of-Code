@@ -40,6 +40,19 @@
                      (map #(->> (str/split % #",") (map parse-long))))]
     (sum-middle-pages updates rules)))
 
+(defn create-test-sequence [sorted-update idx new-val]
+  (-> (subvec sorted-update 0 idx)
+      (conj new-val)
+      (into (subvec sorted-update idx))))
+
+(defn valid-placement? [sorted-update relevant-rules idx next-val]
+  (every? (fn [[x y]]
+            (let [test-seq (create-test-sequence sorted-update idx next-val)]
+              (if (and (some #{x} test-seq) (some #{y} test-seq))
+                (< (.indexOf test-seq x) (.indexOf test-seq y))
+                true)))
+          relevant-rules))
+
 (defn correct-update [update rules]
   (loop [sorted-update []
          remaining-update update]
@@ -47,23 +60,10 @@
       sorted-update
       (let [next-val (first remaining-update)
             relevant-rules (filter (fn [[x y]] (or (= x next-val) (= y next-val))) rules)
-            valid-placement? (fn [idx]
-                               (every?
-                                (fn [[x y]]
-                                  (let [test-update (-> (subvec sorted-update 0 idx)
-                                                        (conj next-val)
-                                                        (into (subvec sorted-update idx)))]
-                                    (if (and (some #{x} test-update) (some #{y} test-update))
-                                      (< (.indexOf test-update x) (.indexOf test-update y))
-                                      true)))
-                                relevant-rules))]
-        (if (every? valid-placement? (range (inc (count sorted-update))))
-          (recur (conj sorted-update next-val) (rest remaining-update))
-          (let [correct-index (first (filter valid-placement? (range (inc (count sorted-update)))))]
-            (recur (-> (subvec sorted-update 0 correct-index)
-                       (conj next-val)
-                       (into (subvec sorted-update correct-index)))
-                   (rest remaining-update))))))))
+            positions (range (inc (count sorted-update)))]
+        (when-let [insert-idx (first (filter #(valid-placement? sorted-update relevant-rules % next-val) positions))]
+          (recur (create-test-sequence sorted-update insert-idx next-val)
+                 (rest remaining-update)))))))
 
 (defn sum-middle-pages-corrected [updates rules]
   (->> updates
@@ -98,4 +98,4 @@
   (let [[rules-lines _ updates-lines] (partition-by str/blank? input)
         rules-str (str/join "\n" rules-lines)
         updates-str (str/join "\n" updates-lines)]
-   (prn (solve-part-2 rules-str updates-str))))
+    (prn (solve-part-2 rules-str updates-str))))
