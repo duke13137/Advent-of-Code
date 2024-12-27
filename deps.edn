@@ -1,5 +1,5 @@
 
-{:paths ["clojure/dev" "clojure/src" "clojure/resources"]
+{:paths ["clojure/dev" "clojure/src" "resources"]
  :deps {org.clojure/clojure                       {:mvn/version "RELEASE"}
         dom-top/dom-top                           {:mvn/version "RELEASE"}
 
