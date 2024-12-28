@@ -8,8 +8,7 @@
 (defn apply-op [op a b]
   (case op
     :+ (+ a b)
-    :* (* a b)
-    :|| (parse-double (str (long a) (long b)))))
+    :* (* a b)))
 
 (defn calculate [nums ops]
   (reduce (fn [acc [num op]]
@@ -20,12 +19,12 @@
 (defn solve-equation [equation]
   (let [target (:target equation)
         nums (:nums equation)
-        num-ops (dec (count nums))
-        ops-combinations (for [i (repeat num-ops [:+ :* :||])]
-                           (apply sequence (partition num-ops 1 i)))]
+        num-ops (dec (count nums))]
     (some (fn [ops]
             (= target (calculate nums ops)))
-          ops-combinations)))
+          (for [i (range (int (Math/pow 2 num-ops)))
+                :let [ops (map #(if (bit-test i %) :* :+) (range num-ops))]]
+            ops))))
 
 (defn part-1 [input]
   (let [equations (map parse-line input)]
@@ -33,10 +32,7 @@
          (filter solve-equation)
          (map :target)
          (reduce +)
-         long)))
-
-(defn part-2 [input]
-  (part-1 input))
+         (long))))
 
 (def example (str/split-lines "190: 10 19
 3267: 81 40 27
@@ -48,10 +44,8 @@
 21037: 9 7 18 13
 292: 11 6 16 20"))
 
-(println "Part 1 Example:" (part-1 example))
-(println "Part 2 Example:" (part-2 example))
+(println (part-1 example))
 
 (def input (str/split-lines (slurp "resources/aoc24/day07.txt")))
 
-(println "Part 1 Input:" (part-1 input))
-(println "Part 2 Input:" (part-2 input))
+(println (part-1 input))
