@@ -42,7 +42,8 @@
 #.........
 ......#...")
 
-;; (part-1 example)
+;; --  AI! fix code in part-1 to make (part-1 example) return 41
+(part-1 example)
 ;; (part-2 example)
 
 (part-1 input)
