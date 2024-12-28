@@ -46,10 +46,14 @@
        (map :test-value)
        (reduce + 0)))
 
+(defn is-valid-part-2? [{:keys [test-value nums]}]
+  (some (fn [ops] (>= test-value (evaluate nums ops)))
+        (generate-op-combinations (count nums))))
+
 (defn part-2 [input]
   (->> input
        (map parse-line)
-       (filter is-valid?)
+       (filter is-valid-part-2?)
        (map :test-value)
        (reduce + 0)))
 
