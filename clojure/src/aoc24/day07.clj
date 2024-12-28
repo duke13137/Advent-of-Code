@@ -3,7 +3,7 @@
 
 (def input (str/split-lines (slurp "resources/aoc24/day07.txt")))
 
-;; -- AI! fix this
+;; -- AI! fix this using transducer
 (defn parse-line [line]
   (let [[test-value & nums] (-> line
                                (str/split #": ")
