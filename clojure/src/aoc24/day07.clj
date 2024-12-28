@@ -1,4 +1,3 @@
-
 (ns aoc24.day07
   (:require [clojure.string :as str]))
 
@@ -53,3 +52,4 @@
 
 (println (part-1 example))
 (println (part-1 input))
+
