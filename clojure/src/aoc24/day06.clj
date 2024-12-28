@@ -50,11 +50,12 @@
     (loop [r 0
            c 0
            valid-obstructions #{}]
+      ;; -- AI! fix cond syntax here
       (cond
         (= r rows) (count valid-obstructions)
         (= c cols) (recur (inc r) 0 valid-obstructions)
-        (or (= [r c] guard-pos) (= \# (get-in grid [r c])))
-          (recur r (inc c) valid-obstructions)
+        (or (= [r c] guard-pos) (= \# (get-in grid [r c]))
+          (recur r (inc c) valid-obstructions))
         :else
           (let [temp-grid (assoc-in grid [r c] \#)
                 [guard-pos guard-dir] (find-guard temp-grid)]
