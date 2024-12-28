@@ -46,11 +46,11 @@
   (let [grid (read-grid input)
         [guard-pos _] (find-guard grid)
         rows (count grid)
+
         cols (count (first grid))]
     (loop [r 0
            c 0
            valid-obstructions #{}]
-      ;; -- AI! fix cond syntax here
       (cond
         (= r rows) (count valid-obstructions)
         (= c cols) (recur (inc r) 0 valid-obstructions)
