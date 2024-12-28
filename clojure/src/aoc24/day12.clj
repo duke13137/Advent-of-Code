@@ -1,6 +1,7 @@
 (ns aoc24.day12
   (:require [clojure.string :as str]))
 
+;; -- AI! refactor this function using clojure idioms e.g. transducer but keep the logic the same!
 (defn calculate-region-properties [grid start-row start-col plant-type visited]
   (let [rows (count grid)
         cols (count (first grid))
@@ -9,7 +10,7 @@
         queue (java.util.LinkedList. [(list start-row start-col)])]
     (swap! visited conj [start-row start-col])
 
-    (while (not (empty? queue))
+    (while (seq queue)
       (let [[row col] (.removeFirst queue)]
         (swap! area inc)
 
@@ -44,7 +45,7 @@
           (swap! total-price + (* area perimeter)))))
     @total-price))
 
-(def input (vec (map vec (str/split-lines (slurp "clojure/resources/aoc24/day12.txt")))))
+(def input (vec (map vec (str/split-lines (slurp "resources/aoc24/day12.txt")))))
 
 (def example1 (vec (map vec ["AAAA" "BBCD" "BBCC" "EEEC"])))
 
