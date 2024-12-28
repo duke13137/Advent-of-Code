@@ -28,6 +28,8 @@
 
 (defn part-1 [input]
   (let [equations (map parse-line input)]
+    (doseq [eq equations]
+      (println eq))
     (->> equations
          (filter solve-equation)
          (map :target)
@@ -48,5 +50,4 @@
 
 
 (println (part-1 example))
-;; -- AI! the answer 4.364915411363E12 is too low. fix that!
 (println (part-1 input))
