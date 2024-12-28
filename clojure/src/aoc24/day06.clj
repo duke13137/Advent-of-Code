@@ -11,11 +11,42 @@
                              [y x]))]
     [grid guard-pos :up]))
 
+(defn turn-right [direction]
+  (case direction
+    :up :right
+    :right :down
+    :down :left
+    :left :up))
+
+(defn move-forward [[y x] direction]
+  (case direction
+    :up [(dec y) x]
+    :right [y (inc x)]
+    :down [(inc y) x]
+    :left [y (dec x)]))
+
+(defn is-obstacle? [grid [y x]]
+  (or (not (and (>= y 0) (< y (count grid)) (>= x 0) (< x (count (grid y)))))
+      (= \# (get-in grid [y x]))))
+
+(defn simulate-guard [grid initial-position initial-direction]
+  (loop [position initial-position
+         direction initial-direction
+         visited #{initial-position}]
+    (let [next-position (move-forward position direction)]
+      (if (is-obstacle? grid next-position)
+        (let [new-direction (turn-right direction)]
+          (recur position new-direction visited))
+        (if (visited next-position)
+          (count visited)
+          (recur next-position direction (conj visited next-position)))))))
+
 (defn part-1
   "Run with bb -x aoc24.day06/part-1"
   [input]
-  (let [[map initial-position initial-direction] (parse-input input)]
-    (prn map initial-position initial-direction)))
+  (let [[map initial-position initial-direction] (parse-input input)
+        visited-count (simulate-guard map initial-position initial-direction)]
+    visited-count))
 
 ;; (defn part-2
 ;;   "Run with bb -x aoc24.day02/part-2"
@@ -42,7 +73,6 @@
 #.........
 ......#...")
 
-;; --  AI! fix code in part-1 to make (part-1 example) return 41
 (part-1 example)
 ;; (part-2 example)
 
