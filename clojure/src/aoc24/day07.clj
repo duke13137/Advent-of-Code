@@ -3,14 +3,11 @@
 
 (def input (str/split-lines (slurp "resources/aoc24/day07.txt")))
 
-;; -- AI! fix this using transducer
 (defn parse-line [line]
-  (let [[test-value & nums] (-> line
-                               (str/split #": ")
-                               (second)
-                               (str/split #"\s+")
-                               (map #(Long/parseLong %)))]
-    {:test-value (first nums) :nums (rest nums)}))
+  (let [[test-value & nums] (->> line
+                                 (str/split #": ")
+                                 (map #(Long/parseLong %)))]
+    {:test-value test-value :nums nums}))
 
 (defn apply-op [op a b]
   (case op
