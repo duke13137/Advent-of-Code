@@ -18,3 +18,4 @@ java/target
 **/resources
 .calva
 .portal/
+__pycache__/

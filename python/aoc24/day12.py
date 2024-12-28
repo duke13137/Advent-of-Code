@@ -1,77 +1,102 @@
-from collections import deque
-
-
-def calculate_region_properties(grid, start_row, start_col, plant_type, visited):
-    """Calculates the area and perimeter of a region."""
+def find_regions(grid):
     rows = len(grid)
-    cols = len(grid[0])
-    area = 0
-    perimeter = 0
-    queue = deque([(start_row, start_col)])
-    visited.add((start_row, start_col))
-
-    while queue:
-        row, col = queue.popleft()
-        area += 1
-
-        # Check neighbors
-        for dr, dc in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
-            new_row, new_col = row + dr, col + dc
-
-            # Check boundaries
-            if 0 <= new_row < rows and 0 <= new_col < cols:
-                if (
-                    grid[new_row][new_col] == plant_type
-                    and (new_row, new_col) not in visited
-                ):
-                    queue.append((new_row, new_col))
-                    visited.add((new_row, new_col))
-                elif grid[new_row][new_col] != plant_type:
-                    perimeter += 1
-            else:
-                # Out of bounds, counts towards perimeter
-                perimeter += 1
-
-    return area, perimeter
-
-
-def calculate_total_price(grid):
-    """Calculates the total price of fencing all regions."""
-    rows = len(grid)
-    cols = len(grid[0])
+    cols = len(grid[0]) if rows > 0 else 0
     visited = set()
+    regions = {}
+
+    def dfs(r, c, plant_type, region):
+        if (
+            r < 0
+            or r >= rows
+            or c < 0
+            or c >= cols
+            or (r, c) in visited
+            or grid[r][c] != plant_type
+        ):
+            return
+        visited.add((r, c))
+        region.append((r, c))
+        dfs(r + 1, c, plant_type, region)
+        dfs(r - 1, c, plant_type, region)
+        dfs(r, c + 1, plant_type, region)
+        dfs(r, c - 1, plant_type, region)
+
+    for r in range(rows):
+        for c in range(cols):
+            if (r, c) not in visited:
+                plant_type = grid[r][c]
+                region = []
+                dfs(r, c, plant_type, region)
+                if region:
+                    regions[plant_type] = regions.get(plant_type, []) + [region]
+    return regions
+
+
+def calculate_sides(region, grid):
+    rows = len(grid)
+    cols = len(grid[0]) if rows > 0 else 0
+    sides = 0
+
+    for r, c in region:
+        # Check all four directions
+        for dr, dc in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+            nr, nc = r + dr, c + dc
+            if nr < 0 or nr >= rows or nc < 0 or nc >= cols:  # Edge of grid
+                sides += 1
+            elif (nr, nc) not in region:
+                sides += 1  # Different plant type or not in region
+    return sides
+
+
+def calculate_total_price_with_sides(grid):
+    regions = find_regions(grid)
     total_price = 0
-
-    for row in range(rows):
-        for col in range(cols):
-            if (row, col) not in visited:
-                plant_type = grid[row][col]
-                area, perimeter = calculate_region_properties(
-                    grid, row, col, plant_type, visited
-                )
-                total_price += area * perimeter
-
+    for plant_type, region_list in regions.items():
+        for region in region_list:
+            area = len(region)
+            sides = calculate_sides(region, grid)
+            total_price += area * sides
     return total_price
 
 
-# Test cases
-example1 = ["AAAA", "BBCD", "BBCC", "EEEC"]
+# Example Usage
+grid1 = ["AAAA", "BBCD", "BBCC", "EEEC"]
 
-example2 = ["OOOOO", "OXOXO", "OOOOO", "OXOXO", "OOOOO"]
-
-example3 = [
-    "RRRRIICCFF",
-    "RRRRIICCCF",
-    "VVRRRCCFFF",
-    "VVRCCCJFFF",
-    "VVVVCJJCFE",
-    "VVIVCCJJEE",
-    "VVIIICJJEE",
-    "MIIIIIJJEE",
-    "MIIISIJEEE",
-    "MMMISSJEEE",
+grid2 = [
+    "XXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXOOOOXX",
+    "XXXXXXXOOOXXXXXX",
+    "XXXXXXOOXXXXXXXO",
+    "XXXXXOOOXXXXXXOO",
+    "XXXXXXXXOOOXXXXX",
+    "XXXXXXXXXOOXXXXX",
+    "XXXXXXXXXXOOXXXX",
+    "XXXXXXXXXXOOOXXX",
+    "XXXXXXXXXXXXXXXO",
+    "XXXXXXXXXXXXXXXX",
 ]
 
-print(f"Example 1 Total Price: {calculate_total_price(example1)}")  # Expected: 140
-print(f"Example 2 Total Price: {calculate_total_price(example2)}")  # Expected: 772
-print(f"Example 3 Total Price: {calculate_total_price(example3)}")  # Expected: 1930
+grid3 = ["EEEEE", "EXXXX", "EEEEE", "EXXXX", "EEEEE"]
+
+grid4 = ["AAAAAA", "AAABBA", "AAABBA", "ABBAAA", "ABBAAA", "AAAAAA"]
+
+grid5 = [
+    "RRRRRRRRRRRR",
+    "RIIIIIIIIRRR",
+    "RIICCCCCCCCC",
+    "RIICFFFFCCCC",
+    "RIIICFFFFVCC",
+    "RIICFFFFVVCC",
+    "RIICFFFFVVCC",
+    "RIIIJJJJVVCC",
+    "RRJJJJJJEEC",
+    "RRJJJEEEIICC",
+    "RRMSSSSIIIII",
+    "RRRRRRRRRRRR",
+]
+
+
+print(f"Price grid 1: {calculate_total_price_with_sides(grid1)}")  # Output: 80
+print(f"Price grid 2: {calculate_total_price_with_sides(grid2)}")  # Output: 436
+print(f"Price grid 3: {calculate_total_price_with_sides(grid3)}")  # Output: 236
+print(f"Price grid 4: {calculate_total_price_with_sides(grid4)}")  # Output: 368

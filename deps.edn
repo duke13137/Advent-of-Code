@@ -1,6 +1,7 @@
 
 {:paths ["clojure/dev" "clojure/src" "resources"]
  :deps {org.clojure/clojure                       {:mvn/version "RELEASE"}
+        com.xadecimal/mutable-var                 {:mvn/version "RELEASE"}
         dom-top/dom-top                           {:mvn/version "RELEASE"}
 
         org.assertj/assertj-core                  {:mvn/version "RELEASE"}
