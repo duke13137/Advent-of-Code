@@ -29,9 +29,9 @@
 ;;        (apply +)
 ;;        prn))
 
-(def input (str/split-lines (slurp (io/resource "aoc24/day06.txt"))))
+(def input (slurp (io/resource "aoc24/day06.txt")))
 
-(def example (str/split-lines "....#.....
+(def example "....#.....
 .........#
 ..........
 ..#.......
@@ -40,7 +40,7 @@
 .#..^.....
 ........#.
 #.........
-......#..."))
+......#...")
 
 ;; (part-1 example)
 ;; (part-2 example)
