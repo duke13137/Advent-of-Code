@@ -63,8 +63,8 @@
 21037: 9 7 18 13
 292: 11 6 16 20"))
 
-(map parse-line example)
-
-;; (println (part-1 example))
-;; (println (part-1 input))
+(println (part-1 example))
+(println (part-2 example))
+(println (part-1 input))
+;; (println (part-2 input))  ; Uncomment this line when part-2 is implemented
 
