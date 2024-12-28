@@ -9,9 +9,8 @@
                                (str/split #": ")
                                (second)
                                (str/split #"\s+")
-                               (cons (first (str/split line #": ")))
                                (map #(Long/parseLong %)))]
-    {:test-value test-value :nums nums}))
+    {:test-value (first nums) :nums (rest nums)}))
 
 (defn apply-op [op a b]
   (case op
