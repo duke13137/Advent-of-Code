@@ -33,6 +33,35 @@
         [(vector next-r next-c) direction]
         [nil nil]))))
 
+(defn simulate-guard-loop [grid pos direction]
+  (loop [pos pos
+         direction direction
+         visited #{[pos direction]}]
+    (let [[next-pos next-dir] (move-guard grid pos direction)]
+      (if (or (nil? next-pos) (visited [next-pos next-dir]))
+        (not (nil? next-pos))
+        (recur next-pos next-dir (conj visited [next-pos next-dir]))))))
+
+(defn part-2 [input]
+  (let [grid (read-grid input)
+        [guard-pos _] (find-guard grid)
+        rows (count grid)
+        cols (count (first grid))]
+    (loop [r 0
+           c 0
+           valid-obstructions #{}]
+      (cond
+        (= r rows) (count valid-obstructions)
+        (= c cols) (recur (inc r) 0 valid-obstructions)
+        (or (= [r c] guard-pos) (= \# (get-in grid [r c])))
+          (recur r (inc c) valid-obstructions)
+        :else
+          (let [temp-grid (assoc-in grid [r c] \#)
+                [guard-pos guard-dir] (find-guard temp-grid)]
+            (if (simulate-guard-loop temp-grid guard-pos guard-dir)
+              (recur r (inc c) (conj valid-obstructions [r c]))
+              (recur r (inc c) valid-obstructions)))))))
+
 (defn part-1 [input]
   (let [grid (read-grid input)
         [guard-pos guard-dir] (find-guard grid)]
@@ -58,7 +87,7 @@
 ......#...")
 
 (part-1 example)
-;; (part-2 example)
+(part-2 example)
 
 (part-1 input)
-;; (part-2 input)
+(part-2 input)
