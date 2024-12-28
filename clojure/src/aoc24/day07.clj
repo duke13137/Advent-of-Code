@@ -1,57 +1,40 @@
 (ns aoc24.day07
   (:require [clojure.string :as str]))
 
-(def input (str/split-lines (slurp "resources/aoc24/day07.txt")))
-
 (defn parse-line [line]
-  (let [[test-value & nums] (->> line
-                                 (str/split #": ")
-                                 (map #(Long/parseLong %)))]
-    {:test-value test-value :nums nums}))
+  (let [[target & nums] (map #(parse-double %) (str/split line #"[: ]+"))]
+    {:target target :nums nums}))
 
 (defn apply-op [op a b]
   (case op
-    "+" (+ a b)
-    "*" (* a b)))
+    :+ (+ a b)
+    :* (* a b)))
 
-(defn evaluate [nums ops]
-  (loop [result (first nums)
-         remaining-nums (rest nums)
-         remaining-ops ops]
-    (if (empty? remaining-ops)
-      result
-      (recur (apply-op (first remaining-ops) result (first remaining-nums))
-             (rest remaining-nums)
-             (rest remaining-ops)))))
+(defn calculate [nums ops]
+  (reduce (fn [acc [num op]]
+            (apply-op op acc num))
+          (first nums)
+          (map vector (rest nums) ops)))
 
-(defn generate-op-combinations [num-count]
-  (if (= 1 num-count)
-    [[]]
-    (let [sub-combinations (generate-op-combinations (dec num-count))]
-      (concat (map #(cons "+" %) sub-combinations)
-              (map #(cons "*" %) sub-combinations)))))
-
-(defn is-valid? [{:keys [test-value nums]}]
-  (some (fn [ops] (= test-value (evaluate nums ops)))
-        (generate-op-combinations (count nums))))
+(defn solve-equation [equation]
+  (let [target (:target equation)
+        nums (:nums equation)
+        num-ops (dec (count nums))]
+    (some (fn [ops]
+            (= target (calculate nums ops)))
+          (for [i (range (int (Math/pow 2 num-ops)))
+                :let [ops (map #(if (bit-test i %) :* :+) (range num-ops))]]
+            ops))))
 
 (defn part-1 [input]
-  (->> input
-       (map parse-line)
-       (filter is-valid?)
-       (map :test-value)
-       (reduce + 0)))
+  (let [equations (map parse-line input)]
+    (->> equations
+         (filter solve-equation)
+         (map :target)
+         (reduce +))))
 
-(defn is-valid-part-2? [{:keys [test-value nums]}]
-  (some (fn [ops] (>= test-value (evaluate nums ops)))
-        (generate-op-combinations (count nums))))
 
-(defn part-2 [input]
-  (->> input
-       (map parse-line)
-       (filter is-valid-part-2?)
-       (map :test-value)
-       (reduce + 0)))
+(def input (str/split-lines (slurp "resources/aoc24/day07.txt")))
 
 (def example (str/split-lines "190: 10 19
 3267: 81 40 27
@@ -63,8 +46,7 @@
 21037: 9 7 18 13
 292: 11 6 16 20"))
 
-(println (part-1 example))
-(println (part-2 example))
-(println (part-1 input))
-;; (println (part-2 input))  ; Uncomment this line when part-2 is implemented
 
+(println (part-1 example))
+;; -- AI! the answer 4.364915411363E12 is too low. fix that!
+(println (part-1 input))
