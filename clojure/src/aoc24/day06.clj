@@ -33,14 +33,16 @@
 (defn simulate-guard [grid initial-position initial-direction]
   (loop [position initial-position
          direction initial-direction
-         visited #{initial-position}]
+         visited #{[initial-position initial-direction]}]
     (let [next-position (move-forward position direction)]
-      (if-not (is-obstacle? grid next-position)
-        (recur next-position direction (conj visited next-position))
-        (let [new-direction (turn-right direction)]
-          (if (is-obstacle? grid (move-forward position new-direction))
-            (count visited)
-            (recur position new-direction visited)))))))
+      (if (or (is-obstacle? grid next-position)
+              (visited [next-position direction]))
+        (let [new-direction (turn-right direction)
+              next-state [position new-direction]]
+          (if (visited next-state)
+            (count (set (map first visited)))
+            (recur position new-direction (conj visited next-state))))
+        (recur next-position direction (conj visited [next-position direction]))))))
 
 (def input (slurp "resources/aoc24/day06.txt"))
 
