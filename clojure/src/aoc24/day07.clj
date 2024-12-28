@@ -10,8 +10,8 @@
                                (second)
                                (str/split #"\s+")
                                (cons (first (str/split line #": ")))
-                               (map parse-line))]
-    {:test-value (first nums) :nums (rest nums)}))
+                               (map #(Long/parseLong %)))]
+    {:test-value test-value :nums nums}))
 
 (defn apply-op [op a b]
   (case op
@@ -40,6 +40,13 @@
         (generate-op-combinations (count nums))))
 
 (defn part-1 [input]
+  (->> input
+       (map parse-line)
+       (filter is-valid?)
+       (map :test-value)
+       (reduce + 0)))
+
+(defn part-2 [input]
   (->> input
        (map parse-line)
        (filter is-valid?)
