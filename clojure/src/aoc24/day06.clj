@@ -42,6 +42,8 @@
             (count visited)
             (recur position new-direction visited)))))))
 
+(def input (slurp "resources/aoc24/day06.txt"))
+
 (defn part-1
   "Run with bb -x aoc24.day06/part-1"
   [input]
@@ -61,7 +63,6 @@
 ;;        (apply +)
 ;;        prn))
 
-(def input (slurp (io/resource "aoc24/day06.txt")))
 
 (def example "....#.....
 .........#
