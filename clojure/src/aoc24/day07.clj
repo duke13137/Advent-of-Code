@@ -4,8 +4,13 @@
 (def input (str/split-lines (slurp "resources/aoc24/day07.txt")))
 
 (defn parse-line [line]
-  (let [[test-value & nums] (map #(Long/parseLong %) (str/split line #":?\\s+"))]
-    {:test-value test-value :nums nums}))
+  (let [[test-value & nums] (-> line
+                               (str/split #": ")
+                               (second)
+                               (str/split #"\s+")
+                               (cons (first (str/split line #": ")))
+                               (map #(Long/parseLong %)))]
+    {:test-value (first nums) :nums (rest nums)}))
 
 (defn apply-op [op a b]
   (case op
