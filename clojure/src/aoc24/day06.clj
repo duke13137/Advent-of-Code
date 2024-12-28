@@ -30,7 +30,6 @@
                 (>= x 0) (< x (count (grid y)))))
       (= \# (get-in grid [y x] :oob))))
 
-;; -- AI! rewrite this with a faster algorithm, e.g. A* or Dijkstra
 (defn simulate-guard [grid initial-position initial-direction]
   (loop [position initial-position
          direction initial-direction
