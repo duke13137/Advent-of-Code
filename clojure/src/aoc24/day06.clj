@@ -26,24 +26,21 @@
     :left [y (dec x)]))
 
 (defn is-obstacle? [grid [y x]]
-  (or (not (and (>= y 0) (< y (count grid)) (>= x 0) (< x (count (grid y)))))
-      (= \# (get-in grid [y x]))))
+  (or (not (and (>= y 0) (< y (count grid))
+                (>= x 0) (< x (count (grid y)))))
+      (= \# (get-in grid [y x] :oob))))
 
 (defn simulate-guard [grid initial-position initial-direction]
   (loop [position initial-position
          direction initial-direction
          visited #{initial-position}]
     (let [next-position (move-forward position direction)]
-      (if (is-obstacle? grid next-position)
+      (if-not (is-obstacle? grid next-position)
+        (recur next-position direction (conj visited next-position))
         (let [new-direction (turn-right direction)]
-          (if (and (= new-direction initial-direction) (= position initial-position))
+          (if (is-obstacle? grid (move-forward position new-direction))
             (count visited)
-            (recur position new-direction visited)))
-        (if (visited next-position)
-          (if (and (= direction initial-direction) (= position initial-position))
-            (count visited)
-            (recur initial-position initial-direction visited))
-          (recur next-position direction (conj visited next-position)))))))
+            (recur position new-direction visited)))))))
 
 (defn part-1
   "Run with bb -x aoc24.day06/part-1"
