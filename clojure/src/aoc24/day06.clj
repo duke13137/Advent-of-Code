@@ -31,7 +31,8 @@
 
 (def input (str/split-lines (slurp (io/resource "aoc24/day06.txt"))))
 
-;; (def example (str/split-lines "...")) ; Example input from the problem
+;; -- AI! get example data from web page!
+(def example (str/split-lines "...")) ; Example input from the problem
 
 ;; (part-1 example)
 ;; (part-2 example)
