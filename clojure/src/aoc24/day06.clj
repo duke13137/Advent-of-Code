@@ -40,7 +40,7 @@
         (let [new-direction (turn-right direction)
               next-state [position new-direction]]
           (if (visited next-state)
-            (count (set (map first visited)))
+            (count (set (map first (remove visited (conj visited next-state)))))
             (recur position new-direction (conj visited next-state))))
         (recur next-position direction (conj visited [next-position direction]))))))
 
