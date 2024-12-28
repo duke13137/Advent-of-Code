@@ -18,8 +18,7 @@
         (let [new-row (+ row (* i dir-row))
               new-col (+ col (* i dir-col))]
           (if (and (>= new-row 0) (< new-row rows) (>= new-col 0) (< new-col cols))
-            (recur (inc i) (str s (get-in grid [new-row new-col])))
-            ""))))))
+            (recur (inc i) (str s (get-in grid [new-row new-col]))) ""))))))
 
 (defn count-occurrences [grid word]
   (let [rows (count grid)
@@ -32,6 +31,7 @@
         (doseq [[dir-row dir-col] directions]
           (let [forward (extract-string grid row col word-len dir-row dir-col)
                 backward (str/reverse forward)]
+            ;; (when (and (= row 2) (= col 3)) (sc.api/spy))
             (when (= forward word)
               (swap! mutable-count inc))
             (when (= backward word)

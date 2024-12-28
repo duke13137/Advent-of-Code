@@ -35,6 +35,7 @@
   (if-let [[instruction-type index] (find-next-instruction input)]
     (let [chunk (subs input 0 index)
           remaining-input (subs input (+ index (if (= instruction-type :do) 4 6)))]
+      ;; (when (= index 20) (sc.api/spy))
       [(+ sum (execute-mul chunk enabled?))
        (= instruction-type :do)
        remaining-input])
@@ -52,9 +53,6 @@
         (recur remaining-input new-sum new-enabled?)))))
 
 (comment
-
   (part-1 nil)
   (part-2 nil)
-
   'comment)  
-  

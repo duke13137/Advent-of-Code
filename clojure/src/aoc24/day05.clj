@@ -99,3 +99,9 @@
         rules-str (str/join "\n" rules-lines)
         updates-str (str/join "\n" updates-lines)]
     (prn (solve-part-2 rules-str updates-str))))
+
+(comment
+
+  (part-1 nil)
+
+  'comment)

@@ -22,7 +22,4 @@
                             :post-hook junit
                             :verbose true)
 
-(require '[portal.api :as p])
-(add-tap #'p/submit)
-
-(set! *warn-on-reflection* true)
+;; (require 'playback.preload)
