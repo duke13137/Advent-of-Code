@@ -58,7 +58,6 @@
 ......#...")
 
 (part-1 example)
-
 ;; (part-2 example)
 
 (part-1 input)
