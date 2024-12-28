@@ -32,15 +32,17 @@
 (defn simulate-guard [grid initial-position initial-direction]
   (loop [position initial-position
          direction initial-direction
-         visited #{}]
+         visited #{initial-position}]
     (let [next-position (move-forward position direction)]
       (if (is-obstacle? grid next-position)
         (let [new-direction (turn-right direction)]
           (if (and (= new-direction initial-direction) (= position initial-position))
-            (count (conj visited position))
+            (count visited)
             (recur position new-direction visited)))
         (if (visited next-position)
-          (count visited)
+          (if (and (= direction initial-direction) (= position initial-position))
+            (count visited)
+            (recur initial-position initial-direction visited))
           (recur next-position direction (conj visited next-position)))))))
 
 (defn part-1
