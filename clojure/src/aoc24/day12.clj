@@ -110,7 +110,6 @@
 (calculate-total-price-part1 example2) ; 772
 (calculate-total-price-part1 example3) ; 1930
 
-;; -- AI! update code so that these tests pass
 (calculate-total-price-part2 example1) ; 80
 (calculate-total-price-part2 example4) ; 236
 (calculate-total-price-part2 example5) ; 368
