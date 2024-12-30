@@ -106,15 +106,14 @@
 
 (def example5 (vec (map vec ["AAAAAA" "AAABBA" "AAABBA" "ABBAAA" "ABBAAA" "AAAAAA"])))
 
-(println (str "Example 1 Total Price (Part 1): " (calculate-total-price-part1 example1)))
-(println (str "Example 2 Total Price (Part 1): " (calculate-total-price-part1 example2)))
-(println (str "Example 3 Total Price (Part 1): " (calculate-total-price-part1 example3)))
+(calculate-total-price-part1 example1) ; 140
+(calculate-total-price-part1 example2) ; 772
+(calculate-total-price-part1 example3) ; 1930
 
-(println (str "Example 1 Total Price (Part 2): " (calculate-total-price-part2 example1)))
-(println (str "Example 2 Total Price (Part 2): " (calculate-total-price-part2 example2)))
-(println (str "Example 3 Total Price (Part 2): " (calculate-total-price-part2 example3)))
-(println (str "Example 4 Total Price (Part 2): " (calculate-total-price-part2 example4)))
-(println (str "Example 5 Total Price (Part 2): " (calculate-total-price-part2 example5)))
+;; -- AI! update code so that these tests pass
+(calculate-total-price-part2 example1) ; 80
+(calculate-total-price-part2 example4) ; 236
+(calculate-total-price-part2 example5) ; 368
 
 
 (defn part-1 [input]
