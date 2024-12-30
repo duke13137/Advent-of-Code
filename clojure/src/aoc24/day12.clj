@@ -30,8 +30,7 @@
                    (let [neighbors [[(dec r) c] [(inc r) c]
                                     [r (dec c)] [r (inc c)]]]
                      (reduce (fn [s [nr nc]]
-                               (if (or (not (< 0 nr rows))
-                                       (not (< 0 nc cols))
+                               (if (or (not (and (< -1 nr rows) (< -1 nc cols)))
                                        (not (contains? region [nr nc])))
                                  (inc s)
                                  s))
@@ -69,8 +68,10 @@
          :price)))
 
 (defn calculate-total-price-part2 [grid]
-  (let [positions (for [row (range (count grid))
-                        col (range (count (first grid)))]
+  (let [rows (count grid)
+        cols (count (first grid))
+        positions (for [row (range rows)
+                        col (range cols)]
                     [row col])]
     (->> positions
          (reduce (fn [{:keys [visited price]} [row col]]
