@@ -70,21 +70,29 @@
 (defn calculate-total-price-part2 [grid]
   (let [rows (count grid)
         cols (count (first grid))
-        positions (for [row (range rows)
-                        col (range cols)]
-                    [row col])]
-    (->> positions
-         (reduce (fn [{:keys [visited price]} [row col]]
-                   (if (visited [row col])
-                     {:visited visited :price price}
-                     (let [plant-type (get-in grid [row col])
-                           region (calculate-region grid row col plant-type)
-                           area (count region)
-                           sides (calculate-region-sides grid region)]
-                       {:visited (into visited region)
-                        :price (+ price (* area sides))})))
-                 {:visited #{} :price 0})
-         :price)))
+        visited (atom #{})
+        total-price (atom 0)]
+    (doseq [row (range rows)
+            col (range cols)]
+      (when-not (@visited [row col])
+        (let [plant-type (get-in grid [row col])
+              region (calculate-region grid row col plant-type)
+              area (count region)
+              sides (->> region
+                         (reduce (fn [sides [r c]]
+                                   (let [neighbors [[(dec r) c] [(inc r) c]
+                                                    [r (dec c)] [r (inc c)]]]
+                                     (reduce (fn [s [nr nc]]
+                                               (if (or (not (and (< -1 nr rows) (< -1 nc cols)))
+                                                       (not (contains? region [nr nc])))
+                                                 (inc s)
+                                                 s))
+                                             sides
+                                             neighbors)))
+                                 0))]
+          (swap! visited into region)
+          (swap! total-price + (* area sides)))))
+    @total-price))
 
 (def input (vec (map vec (str/split-lines (slurp "resources/aoc24/day12.txt")))))
 
