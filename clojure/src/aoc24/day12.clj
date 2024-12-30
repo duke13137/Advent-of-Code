@@ -30,8 +30,8 @@
                    (let [neighbors [[(dec r) c] [(inc r) c]
                                     [r (dec c)] [r (inc c)]]]
                      (reduce (fn [s [nr nc]]
-                               (if (or (not (< -1 nr rows))
-                                       (not (< -1 nc cols))
+                               (if (or (not (< 0 nr rows))
+                                       (not (< 0 nc cols))
                                        (not (contains? region [nr nc])))
                                  (inc s)
                                  s))
