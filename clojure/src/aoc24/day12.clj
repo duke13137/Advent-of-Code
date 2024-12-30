@@ -1,49 +1,6 @@
 (ns aoc24.day12
   (:require [clojure.string :as str]))
 
-#_#_(defn calculate-region-properties [grid start-row start-col plant-type visited]
-      (let [rows (count grid)
-            cols (count (first grid))
-            area (atom 0)
-            perimeter (atom 0)
-            queue (java.util.LinkedList. [(list start-row start-col)])]
-        (swap! visited conj [start-row start-col])
-
-        (while (seq queue)
-          (let [[row col] (.removeFirst queue)]
-            (swap! area inc)
-
-            (doseq [[dr dc] [[0 1] [0 -1] [1 0] [-1 0]]]
-              (let [new-row (+ row dr)
-                    new-col (+ col dc)]
-
-                (cond
-                  (or (< new-row 0) (>= new-row rows) (< new-col 0) (>= new-col cols))
-                  (swap! perimeter inc)
-
-                  (and (= (get-in grid [new-row new-col]) plant-type)
-                       (not (contains? @visited [new-row new-col])))
-                  (do
-                    (.addLast queue (list new-row new-col))
-                    (swap! visited conj [new-row new-col]))
-
-                  (not= (get-in grid [new-row new-col]) plant-type)
-                  (swap! perimeter inc))))))
-        [@area @perimeter]))
-
-  (defn calculate-total-price [grid]
-    (let [rows (count grid)
-          cols (count (first grid))
-          visited (atom #{})
-          total-price (atom 0)]
-      (doseq [row (range rows)
-              col (range cols)]
-        (when (not (contains? @visited [row col]))
-          (let [plant-type (get-in grid [row col])
-                [area perimeter] (calculate-region-properties grid row col plant-type visited)]
-            (swap! total-price + (* area perimeter)))))
-      @total-price))
-
 (defn calculate-region
   "Returns a set of all [row col] positions in a connected region of the same plant type"
   [grid start-row start-col plant-type]
@@ -63,6 +20,25 @@
         (recur (into (disj to-visit pos) valid-neighbors)
                (conj visited pos))))))
 
+(defn calculate-region-sides
+  "Returns the number of sides for a connected region"
+  [grid region]
+  (let [rows (count grid)
+        cols (count (first grid))]
+    (->> region
+         (reduce (fn [sides [r c]]
+                   (let [neighbors [[(dec r) c] [(inc r) c]
+                                    [r (dec c)] [r (inc c)]]]
+                     (reduce (fn [s [nr nc]]
+                               (if (or (not (< -1 nr rows))
+                                       (not (< -1 nc cols))
+                                       (not (contains? region [nr nc])))
+                                 (inc s)
+                                 s))
+                             sides
+                             neighbors)))
+                 0))))
+
 (defn calculate-region-properties
   "Returns [area perimeter] for a connected region"
   [grid row col plant-type]
@@ -77,8 +53,7 @@
                               1))]
     [area perimeter]))
 
-
-(defn calculate-total-price [grid]
+(defn calculate-total-price-part1 [grid]
   (let [positions (for [row (range (count grid))
                         col (range (count (first grid)))]
                     [row col])]
@@ -90,6 +65,23 @@
                            [area perimeter] (calculate-region-properties grid row col plant-type)]
                        {:visited (into visited (calculate-region grid row col plant-type))
                         :price (+ price (* area perimeter))})))
+                 {:visited #{} :price 0})
+         :price)))
+
+(defn calculate-total-price-part2 [grid]
+  (let [positions (for [row (range (count grid))
+                        col (range (count (first grid)))]
+                    [row col])]
+    (->> positions
+         (reduce (fn [{:keys [visited price]} [row col]]
+                   (if (visited [row col])
+                     {:visited visited :price price}
+                     (let [plant-type (get-in grid [row col])
+                           region (calculate-region grid row col plant-type)
+                           area (count region)
+                           sides (calculate-region-sides grid region)]
+                       {:visited (into visited region)
+                        :price (+ price (* area sides))})))
                  {:visited #{} :price 0})
          :price)))
 
@@ -110,16 +102,26 @@
                              "MIIISIJEEE"
                              "MMMISSJEEE"])))
 
-(println (str "Example 1 Total Price: " (calculate-total-price example1)))
-(println (str "Example 2 Total Price: " (calculate-total-price example2)))
-(println (str "Example 3 Total Price: " (calculate-total-price example3)))
+(def example4 (vec (map vec ["EEEEE" "EXXXX" "EEEEE" "EXXXX" "EEEEE"])))
+
+(def example5 (vec (map vec ["AAAAAA" "AAABBA" "AAABBA" "ABBAAA" "ABBAAA" "AAAAAA"])))
+
+(println (str "Example 1 Total Price (Part 1): " (calculate-total-price-part1 example1)))
+(println (str "Example 2 Total Price (Part 1): " (calculate-total-price-part1 example2)))
+(println (str "Example 3 Total Price (Part 1): " (calculate-total-price-part1 example3)))
+
+(println (str "Example 1 Total Price (Part 2): " (calculate-total-price-part2 example1)))
+(println (str "Example 2 Total Price (Part 2): " (calculate-total-price-part2 example2)))
+(println (str "Example 3 Total Price (Part 2): " (calculate-total-price-part2 example3)))
+(println (str "Example 4 Total Price (Part 2): " (calculate-total-price-part2 example4)))
+(println (str "Example 5 Total Price (Part 2): " (calculate-total-price-part2 example5)))
 
 
 (defn part-1 [input]
-  (calculate-total-price input))
+  (calculate-total-price-part1 input))
 
 (defn part-2 [input]
-  (calculate-total-price input))
+  (calculate-total-price-part2 input))
 
 (println (str "Part 1: " (part-1 input)))
 (println (str "Part 2: " (part-2 input)))
