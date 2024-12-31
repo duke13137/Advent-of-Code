@@ -22,4 +22,3 @@
                             :post-hook junit
                             :verbose true)
 
-;; (require 'playback.preload)

@@ -100,3 +100,7 @@ print(f"Price grid 1: {calculate_total_price_with_sides(grid1)}")  # Output: 80
 print(f"Price grid 2: {calculate_total_price_with_sides(grid2)}")  # Output: 436
 print(f"Price grid 3: {calculate_total_price_with_sides(grid3)}")  # Output: 236
 print(f"Price grid 4: {calculate_total_price_with_sides(grid4)}")  # Output: 368
+
+
+def test():
+    calculate_total_price_with_sides(grid1)

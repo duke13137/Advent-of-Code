@@ -1,6 +1,7 @@
 {:paths ["bb" "src" "resources"]
- :deps {com.github.gnl/playback {:mvn/version "RELEASE"}
-        vvvvalvalval/scope-capture {:mvn/version "RELEASE"}}
+ :deps {djblue/portal                  {:mvn/version "RELEASE"}
+        io.github.paintparty/fireworks {:mvn/version "RELEASE"}
+        vvvvalvalval/scope-capture     {:mvn/version "RELEASE"}}
  :tasks {new-day {:doc "Generates stub for day. Usage: bb new-day --year 22 --day 02"
                   :requires ([babashka.fs :as fs]
                              [clojure.string :as str])

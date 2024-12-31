@@ -91,5 +91,9 @@
 (part-1 example)
 (part-2 example)
 
-(part-1 input)
-(part-2 input)
+(comment 
+  (require '[clj-async-profiler.core :as prof])
+  (prof/profile (part-1 input))
+  (prof/profile (part-2 input))
+  (prof/serve-ui 8080)
+  'comment)

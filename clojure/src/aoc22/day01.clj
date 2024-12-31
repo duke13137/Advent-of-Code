@@ -1,6 +1,7 @@
 (ns aoc22.day01
   (:require [clojure.java.io :as io]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [fireworks.core :refer [? !? ?> !?>]]))
 
 (def input (->> (slurp (io/resource "aoc22/day01.txt"))
                 (str/split-lines)
@@ -9,7 +10,7 @@
 (defn part-1
   "Run with bb -x aoc22.day01/part-1"
   [_]
-  (->> input
+  (->> (?> input)
        (partition-by nil?)
        (take-nth 2)
        (map #(apply + %))
@@ -27,3 +28,6 @@
        (take 3)
        (apply +)
        prn))
+
+(part-1 nil)
+(part-2 nil)

@@ -1,6 +1,6 @@
 (ns aoc24.day04
   (:require
-   [com.xadecimal.mutable-var :as mut :refer]
+   [com.xadecimal.mutable-var :refer [var-scope]]
    [clojure.java.io :as io]
    [clojure.string :as str]))
 
@@ -26,14 +26,13 @@
         cols (count (first grid))
         word-len (count word)
         directions [[0 1] [1 0] [1 1] [1 -1]]]
-    (mut/var-scope
+    (var-scope
      (var mutable-count 0)
      (doseq [row (range rows)]
        (doseq [col (range cols)]
          (doseq [[dir-row dir-col] directions]
            (let [forward (extract-string grid row col word-len dir-row dir-col)
                  backward (str/reverse forward)]
-            ;; (when (and (= row 2) (= col 3)) (sc.api/spy))
              (when (= forward word)
                (set! mutable-count (+ mutable-count 1)))
              (when (= backward word)
