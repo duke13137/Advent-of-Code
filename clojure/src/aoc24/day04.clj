@@ -1,6 +1,5 @@
 (ns aoc24.day04
   (:require
-   [com.xadecimal.mutable-var :refer [var-scope]]
    [clojure.java.io :as io]
    [clojure.string :as str]))
 
@@ -25,19 +24,19 @@
   (let [rows (count grid)
         cols (count (first grid))
         word-len (count word)
-        directions [[0 1] [1 0] [1 1] [1 -1]]]
-    (var-scope
-     (var mutable-count 0)
-     (doseq [row (range rows)]
-       (doseq [col (range cols)]
-         (doseq [[dir-row dir-col] directions]
-           (let [forward (extract-string grid row col word-len dir-row dir-col)
-                 backward (str/reverse forward)]
-             (when (= forward word)
-               (set! mutable-count (+ mutable-count 1)))
-             (when (= backward word)
-               (set! mutable-count (+ mutable-count 1)))))))
-     mutable-count)))
+        directions [[0 1] [1 0] [1 1] [1 -1]]
+        mutable-count (atom 0)]
+    (doseq [row (range rows)]
+      (doseq [col (range cols)]
+        (doseq [[dir-row dir-col] directions]
+          (let [forward (extract-string grid row col word-len dir-row dir-col)
+                backward (str/reverse forward)]
+            ;; (when (and (= row 2) (= col 3)) (sc.api/spy))
+            (when (= forward word)
+              (swap! mutable-count inc))
+            (when (= backward word)
+              (swap! mutable-count inc))))))
+    @mutable-count))
 
 (defn- check-diagonal-for-mas [grid row col dir-row dir-col]
   (let [word "MAS"
