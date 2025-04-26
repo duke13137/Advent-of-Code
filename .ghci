@@ -1,0 +1,4 @@
+import Optics
+import Relude
+
+:load hs/Day01-2024/Main.hs

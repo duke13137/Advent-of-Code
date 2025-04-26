@@ -24,6 +24,7 @@
 (defn- find-next-instruction [input]
   (let [do-index (str/index-of input "do()")
         dont-index (str/index-of input "don't()")]
+    ;; #sc/spy
     (cond
       (and (nil? do-index) (nil? dont-index)) nil
       (nil? do-index) [:dont dont-index]

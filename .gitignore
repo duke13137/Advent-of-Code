@@ -19,3 +19,7 @@ java/target
 .calva
 .portal/
 __pycache__/
+*.o
+*.hi
+*.hoo
+ghcid.txt
