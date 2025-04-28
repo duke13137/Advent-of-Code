@@ -1,3 +1,5 @@
+:set -fplugin=Debug.Breakpoint
+
 import Optics
 import Relude
 
