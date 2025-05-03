@@ -1,7 +1,17 @@
-:set -fplugin=Debug.Breakpoint
+-- :set -fplugin=Debug.Breakpoint
 :set -fplugin=AutoSplit
 
-import Optics
-import Relude
+:seti -XGHC2021
+:seti -XPartialTypeSignatures
+:seti -XOverloadedLabels
+:seti -XOverloadedRecordDot
+:seti -XNoImplicitPrelude
 
-:load hs/Day01-2024/Main.hs
+:set -Wno-type-defaults
+:set -Wno-unused-top-binds
+
+:set -fwrite-ide-info
+:set -hiedir .hiefiles
+
+:set -isrc
+:load Imports
