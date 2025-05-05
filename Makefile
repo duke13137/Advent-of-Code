@@ -14,7 +14,7 @@ env:
 	rm .ghc.environment.*$(GHC)* || true
 	cabal install -w ghc-$(GHC) --allow-newer --package-env . --lib \
 		base relude optics witch bluefin conduit io-classes io-sim  \
-		aeson aeson-optics blaze-html ihp-hsx optparse-generic twain wai wai-extra warp \
+		aeson aeson-optics lucid2 ihp-hsx optparse-generic twain wai wai-extra warp \
 		auto-split breakpoint pretty-show rapid tasty tasty-hunit template-haskell 
 
 hie:

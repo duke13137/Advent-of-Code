@@ -23,9 +23,7 @@ import Web.Twain qualified as Http
 import CustomHsx (hsx)
 import IHP.HSX.ConvertibleStrings ()
 import IHP.HSX.ToHtml ()
-import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
-import Text.Blaze.Html5 (Html, preEscapedToHtml)
-import Text.Blaze.Html5 qualified as H
+import Lucid
 
 main :: IO ()
 main = webserver
@@ -46,7 +44,7 @@ routes =
   , Http.get "/echo/:name" echoName
   ]
 
-template :: Html -> Html
+template :: Html () -> Html ()
 template body = [hsx|
   <!DOCTYPE html>
   <html lang="en">
@@ -62,8 +60,8 @@ template body = [hsx|
   </html>
 |]
 
-render :: Html -> ResponderM a
-render = send . html . renderHtml . template
+render :: Html () -> ResponderM a
+render = send . html . renderBS . template
 
 index :: ResponderM a
 index = render [hsx| <h1>Hello World</h1> |]
