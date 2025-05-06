@@ -29,5 +29,6 @@ java/target
 *.hoo
 tags*
 ghcid.txt
+static-ls
 .hiedb*
 .hiefiles/

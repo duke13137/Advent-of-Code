@@ -6,7 +6,6 @@ module Imports (
 , module Data.Conduit
 , module Test.Tasty
 , module Test.Tasty.HUnit
-, module Witch
 , Eff, Effects, runPureEff, (:&), (:>), (>>=)
 , stdoutBuffering
 ) where
@@ -28,7 +27,6 @@ import Control.Monad.Class.MonadTime as Classes
 import Control.Monad.Class.MonadTimer as Classes
 
 import Data.Conduit hiding (yield)
-import Witch
 
 import Test.Tasty
 import Test.Tasty.HUnit

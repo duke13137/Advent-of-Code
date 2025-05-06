@@ -24,9 +24,10 @@ import CustomHsx (hsx)
 import IHP.HSX.ConvertibleStrings ()
 import IHP.HSX.ToHtml ()
 import Lucid
+import Witch
 
 main :: IO ()
-main = webserver
+main = reload -- webserver
 
 -- $> reload
 reload :: IO ()
@@ -69,6 +70,7 @@ index = render [hsx| <h1>Hello World</h1> |]
 echoName :: ResponderM a
 echoName = do
   name <- param @Text "name"
+  -- breakpointM
   render [hsx| <h1 id="hello">Hello, {name}!</h1> |]
 
 missing :: ResponderM a
