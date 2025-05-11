@@ -3,5 +3,4 @@
  :deps {org.clojure/clojure {:mvn/version "RELEASE"}
         com.rpl/specter     {:mvn/version "RELEASE"}
         datalevin/datalevin {:mvn/version "RELEASE"}
-        dom-top/dom-top     {:mvn/version "RELEASE"}
-        io.github.tonsky/clojure-plus {:mvn/version "RELEASE"}}}
+        dom-top/dom-top     {:mvn/version "RELEASE"}}}

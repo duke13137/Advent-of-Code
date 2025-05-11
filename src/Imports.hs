@@ -7,7 +7,8 @@ module Imports (
 , module Test.Tasty
 , module Test.Tasty.HUnit
 , Eff, Effects, runPureEff, (:&), (:>), (>>=)
-, stdoutBuffering
+, sinkFold, sinkFoldM, sinkFold_, sinkFoldM_
+, tasty
 ) where
 
 import Relude hiding (STM, State, atomically, evalState, get, modify, put, runState, throwSTM, uncons, withState, (>>=))
@@ -26,7 +27,9 @@ import Control.Monad.Class.MonadThrow as Classes
 import Control.Monad.Class.MonadTime as Classes
 import Control.Monad.Class.MonadTimer as Classes
 
+import Control.Foldl qualified as L
 import Data.Conduit hiding (yield)
+import Data.Conduit.Combinators qualified as C
 
 import Test.Tasty
 import Test.Tasty.HUnit
@@ -37,9 +40,22 @@ import Test.Tasty.HUnit
   Eff es a
 (>>=) handler = handler
 
-stdoutBuffering :: IO a -> IO a
-stdoutBuffering action =
+sinkFold :: Monad m => L.Fold a b -> ConduitT a o m b
+sinkFold = L.purely sinkFold_
+
+sinkFoldM :: Monad m => L.FoldM m a b -> ConduitT a o m b
+sinkFoldM = L.impurely sinkFoldM_
+
+sinkFold_ :: Monad m => (x -> a -> x) -> x -> (x -> b) -> ConduitT a o m b
+sinkFold_ combine seed extract = fmap extract (C.foldl combine seed)
+
+sinkFoldM_ :: Monad m => (x -> a -> m x) -> m x -> (x -> m b) -> ConduitT a o m b
+sinkFoldM_ combine seed extract =
+  lift . extract =<< C.foldM combine =<< lift seed
+
+tasty :: TestTree -> IO ()
+tasty action =
   bracket
     (hGetBuffering stdout)
     (hSetBuffering stdout)
-    (const action)
+    (const $ defaultMain action)
