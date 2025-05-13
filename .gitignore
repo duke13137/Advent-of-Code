@@ -27,8 +27,9 @@ java/target
 *.hi
 *.dyn_*
 *.hoo
-tags*
+*tags*
 ghcid.txt
 static-ls
 .hiedb*
 .hiefiles/
+.ghc.environ*

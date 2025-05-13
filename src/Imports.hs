@@ -4,6 +4,7 @@ module Imports (
 , module Bluefin
 , module Classes
 , module Data.Conduit
+, module Data.Strict.Wrapper
 , module Test.Tasty
 , module Test.Tasty.HUnit
 , Eff, Effects, runPureEff, (:&), (:>), (>>=)
@@ -30,6 +31,7 @@ import Control.Monad.Class.MonadTimer as Classes
 import Control.Foldl qualified as L
 import Data.Conduit hiding (yield)
 import Data.Conduit.Combinators qualified as C
+import Data.Strict.Wrapper
 
 import Test.Tasty
 import Test.Tasty.HUnit
