@@ -1,13 +1,11 @@
-{-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
-module CustomHsx where
-
-import Imports
+module Html (hsx, module Lucid) where
 
 import Data.Set qualified as Set
 import IHP.HSX.Lucid2.QQ (customHsx)
 import IHP.HSX.Parser
 import Language.Haskell.TH.Quote
+import Lucid
 
 hsx :: QuasiQuoter
 hsx= customHsx

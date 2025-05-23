@@ -1,7 +1,6 @@
 (ns aoc22.day01
   (:require [clojure.java.io :as io]
-            [clojure.string :as str]
-            [fireworks.core :refer [? !? ?> !?>]]))
+            [clojure.string :as str]))
 
 (require '[malli.core :as m])
 (require '[malli.instrument :as mi])
@@ -13,7 +12,7 @@
 (defn part-1
   "Run with bb -x aoc22.day01/part-1"
   [_]
-  (->> (?> input)
+  (->> input
        (partition-by nil?)
        (take-nth 2)
        (map #(apply + %))

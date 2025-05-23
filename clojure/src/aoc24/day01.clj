@@ -20,7 +20,7 @@
   [_]
   (let [[left right] input
         freqs (frequencies right)]
-    #sc/spy
+    ;; #sc/spy
     (->> left
          (map (fn [x]
                 (* x (get freqs x 0))))

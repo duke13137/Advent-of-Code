@@ -1,14 +1,8 @@
-.DS_Store
-.env
-.envrc
-.aider*
+.*
 
-.cache
-.cpcache
-.calva
-.clj-kondo/
-.portal/
-.nrepl-port
+resources
+resources/
+target/
 
 __pycache__/
 package-lock.json
@@ -16,20 +10,7 @@ node_modules
 *.mjs
 *_cherry.*
 
-input
-java/.classpath
-java/.project
-java/.settings
-java/target
-**/resources
-
-*.o
-*.hi
-*.dyn_*
-*.hoo
-*tags*
+!.ghci
 ghcid.txt
 static-ls
-.hiedb*
-.hiefiles/
-.ghc.environ*
+*tags*

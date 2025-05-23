@@ -13,12 +13,13 @@
                                             "-cp" "java/target/classes:java/target/test-classes"
                                             "-n" include]))))
 
-(require 'virgil)
-(virgil/watch-and-recompile ["java/src" "java/test"]
-                            :options ["--release" "21" "-Xlint:unchecked"]
-                            :post-hook junit
-                            :verbose true)
-
 (require '[clj-reload.core :as reload])
 (reload/init {:dirs ["clojure/src"]})
 
+(require 'virgil)
+(virgil/watch-and-recompile ["java/src" "java/test"]
+                            :options ["--release" "21" "-Xlint:unchecked"]
+                            :post-hook #(do
+                                          (junit)
+                                          (reload/reload {:only :loaded}))
+                            :verbose true)
