@@ -1,5 +1,9 @@
 (in-ns 'user)
 
+((requiring-resolve 'clojure+.error/install!))
+((requiring-resolve 'clojure+.hashp/install!))
+((requiring-resolve 'clojure+.print/install!))
+
 (import 'org.junit.platform.console.ConsoleLauncher)
 (def console (System/console))
 (def stdout (.writer console))
