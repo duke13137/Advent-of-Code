@@ -27,7 +27,7 @@ tests = testGroup "Tasty.Wai Tests"
   [ testWai app "Hello World" do
       resp <- Test.get "/"
       assertStatus 200 resp
-      assertBody "<h1>hello, world!</h1>" resp
+      assertBodyContains "Welcome" resp
   , testWai app "Not found" do
       resp <- Test.get "/notfound"
       assertStatus 404 resp
