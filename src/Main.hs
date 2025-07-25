@@ -38,34 +38,43 @@ routes =
   , Http.get "/echo/:name" echoName
   ]
 
-template :: Html () -> Html ()
-template body = [hsx|
+page :: Html () -> Html ()
+page body = [hsx|
   <!DOCTYPE html>
   <html lang="en">
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>My Simple HTML Page</title>
-      <script src="https://unpkg.com/htmx.org@2.0.4"/>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basecoat-css@0.2.8/dist/basecoat.cdn.min.css">
+      <script src="https://cdn.jsdelivr.net/npm/basecoat-css@0.2.8/dist/js/all.min.js" defer></script>
+      <script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js"></script>
     </head>
-    <body hx-boost="true">
+    <body>
       {body}
     </body>
   </html>
 |]
 
 render :: Html () -> ResponderM a
-render = send . html . renderBS . template
+render = send . html . renderBS
 
 index :: ResponderM a
-index = send $ html "<h1>hello, world!</h1>"
+index = render $ page [hsx|
+    <button class="btn" data-on-click="@get('/echo/world')">
+        Open the pod bay doors, HAL.
+    </button>
+    <h1 id="hello">Welcome</h1>
+|]
 
 echoName :: ResponderM a
 echoName = logger do
   name <- lift $ param @Text "name"
   logInfo $ "name: " <>  name
   -- breakpointM
-  lift $ render [hsx| <h1 id="hello">Hello, {name}!</h1> |]
+  lift $ render [hsx|
+    <h1 id="hello">Hello, {name}!</h1>
+  |]
 
 missing :: ResponderM a
 missing = send $ text "Not found..."

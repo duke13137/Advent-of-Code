@@ -90,7 +90,7 @@ sumStatement :: Statement (Int64, Int64) Int64
 sumStatement =
   [Sql.singletonStatement|
     select ($1 :: int8 + $2 :: int8) :: int8
-    |]
+  |]
 
 divModStatement :: Statement (Int64, Int64) (Int64, Int64)
 divModStatement =
@@ -98,4 +98,4 @@ divModStatement =
     select
       (($1 :: int8) / ($2 :: int8)) :: int8,
       (($1 :: int8) % ($2 :: int8)) :: int8
-    |]
+  |]
