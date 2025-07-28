@@ -1,7 +1,6 @@
 (ns aoc24.day01
   (:require  [clojure.java.io :as io]
-             [clojure.string :as str]
-             [playback.preload]))
+             [clojure.string :as str]))
 
 (def input (->> (slurp (io/resource "aoc24/day01.txt"))
                 (str/split-lines)

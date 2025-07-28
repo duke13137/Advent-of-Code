@@ -15,7 +15,7 @@
 :set -Wno-unused-top-binds
 
 :set -fwrite-ide-info
-:set -outputdir .ghcfiles
+:set -outputdir .build
 
 :set -isrc
 
