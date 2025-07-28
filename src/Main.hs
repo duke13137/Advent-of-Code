@@ -46,9 +46,9 @@ page body = [hsx|
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>My Simple HTML Page</title>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basecoat-css@0.2.8/dist/basecoat.cdn.min.css">
-      <script src="https://cdn.jsdelivr.net/npm/basecoat-css@0.2.8/dist/js/all.min.js" defer></script>
-      <script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js"></script>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basecoat-css@0.3.0/dist/basecoat.cdn.min.css">
+      <script src="https://cdn.jsdelivr.net/npm/basecoat-css@0.3.0/dist/js/all.min.js" defer></script>
+      <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js" integrity="sha384-Akqfrbj/HpNVo8k11SXBb6TlBWmXXlYQrCSqEWmyKJe+hDm3Z/B2WVG4smwBkRVm" crossorigin="anonymous"></script>
     </head>
     <body>
       {body}
@@ -61,8 +61,8 @@ render = send . html . renderBS
 
 index :: ResponderM a
 index = render $ page [hsx|
-    <button class="btn" data-on-click="@get('/echo/world')">
-        Open the pod bay doors, HAL.
+    <button class="btn" hx-get="/echo/world" hx-target="#hello">
+        Hi
     </button>
     <h1 id="hello">Welcome</h1>
 |]

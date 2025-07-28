@@ -9,11 +9,12 @@ EXE  := $(shell basename $(MAIN) .Main)
 .PHONY: exe env hie pg watch
 
 exe:
-	ghc-$(GHC) -isrc -outputdir .ghcfiles -main-is $(MAIN) -o .ghcfiles/$(EXE) $(MAIN)
+	mkdir -p .build && ln -sf .build .hiefiles && ln -sf .build .hifiles
+	ghc-$(GHC) -isrc -outputdir .build -main-is $(MAIN) -o .build/$(EXE) $(MAIN)
 
 env:
 	rm .ghc.environment.*$(GHC)* || true
-	cabal install -w ghc-$(GHC) --allow-newer --package-env . --lib \
+	cabal install -w ghc-$(GHC) --allow-newer --enable-documentation --package-env . --lib \
 		base relude bytestring text containers unordered-containers \
 		aeson optics aeson-optics optparse-generic pretty-show strict-wrapper \
 		bluefin conduit foldl io-classes io-sim stm stm-containers \
@@ -22,7 +23,7 @@ env:
 		auto-split breakpoint rapid tasty tasty-hunit tasty-wai
 
 hie:
-	hiedb-$(GHC) -D .hiedb index .ghcfiles
+	hiedb-$(GHC) -D .hiedb index .build
 
 pg:
 	docker run --name postgres \

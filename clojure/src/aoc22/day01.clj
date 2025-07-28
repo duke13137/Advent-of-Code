@@ -1,9 +1,18 @@
 (ns aoc22.day01
   (:require [clojure.java.io :as io]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [clojure.spec.alpha :as s]))
 
-(require '[malli.core :as m])
-(require '[malli.instrument :as mi])
+(require '[com.fulcrologic.guardrails.core :refer [>defn >def | ? =>]])
+(require '[playback.core])
+
+(>def ::thing (s/or :i int? :s string?))
+(>defn f [i] [::thing => int?]
+  (if (string? i)
+    0
+    (inc i)))
+
+(f 3)
 
 (def input (->> (slurp (io/resource "aoc22/day01.txt"))
                 (str/split-lines)
@@ -33,16 +42,3 @@
 
 (part-1 nil)
 (part-2 nil)
-
-(defn kikka
-  {:malli/schema [:-> :int :string]}
-  [x] (str x))
-
-(defn kakka
-  {:malli/schema [:-> :string :string]}
-  [x] (str x))
-
-(kikka 1)
-(kakka "1")
-
-(mi/collect!)

@@ -22,7 +22,7 @@
 
 (require 'virgil)
 (virgil/watch-and-recompile ["java/src" "java/test"]
-                            :options ["--release" "21" "-Xlint:unchecked"]
+                            :options ["--release" "25" "-Xlint:unchecked"]
                             :post-hook #(do
                                           (junit)
                                           (reload/reload {:only :loaded}))
